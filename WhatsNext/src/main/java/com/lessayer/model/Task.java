@@ -2,10 +2,12 @@ package com.lessayer.model;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity
 public class Task {
 	
 	@Id
@@ -30,6 +32,16 @@ public class Task {
 		this.priority = priority;
 	}
 
+	public Task(long id, String title, String description, Date createTime, Date deadline, Priority priority) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.createTime = createTime;
+		this.deadline = deadline;
+		this.priority = priority;
+	}
+	
 	@Override
 	public String toString() {
 		
