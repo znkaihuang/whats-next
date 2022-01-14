@@ -13,15 +13,24 @@ This application provides user to schedulize their to-do list.
    (May add more attributes.)
 5. Needs a logout function.
 
-# Layout
+# Flowchart
+
+<p align="center">
+  <img src="flowchart.drawio.png">
+</p>
 
 # Implementations
-## Welcome page
+* Login / Logout
+* Welcome page (Home page)
+* EER diagram of database
+
+## Login / Logout
+Implemented by Spring Security
+
+## Welcome page (Home page)
 * The welcome page should show a message saying `Hello ${USER}!`
 * The welcome page should support english, french and traditional chinese.
 * (Optional) Shows current time.
 * (Optional) Shows the previous login time.
-
-Estimated required time: 0.5 day
 
 ![Welcome page layout](layout/welcome-page-layout.drawio.png)
