@@ -1,15 +1,39 @@
 package com.lessayer.model;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.stereotype.Repository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TaskRepository extends CrudRepository<Task, Long> {
+@Transactional
+public class TaskRepository {
+	
+	@PersistenceContext
+	EntityManager entityManager;
+	
+	public List<Task> findAll() {
+		
+		TypedQuery<Task> query = entityManager.createNamedQuery("find_all_tasks", Task.class);
+		return query.getResultList();
+		
+	}
+	
+	public Task findById(long id) {
+		
+		return entityManager.find(Task.class, id);
+		
+	}
+	
+	public Task insert(Task task) {
+		
+		return entityManager.merge(task);
+		
+	}
 	
 }

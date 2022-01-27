@@ -21,13 +21,13 @@ class TaskTests {
 	static void initTaskRepository() {
 		
 		taskRepository = new ArrayList<>();
-		taskRepository.add(new Task(0, "Project \"What's the next?\"", 
+		taskRepository.add(new Task(0, 0, "Project \"What's the next?\"", 
 				"Side project to implement a scheduler application",
 				Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.of(2022, 1, 31)), Priority.Critical));
-		taskRepository.add(new Task(1, "Project \"Account management\"", 
+		taskRepository.add(new Task(1, 0, "Project \"Account management\"", 
 				"Side project to implement a account management application",
 				Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.of(2022, 1, 31)), Priority.Medium));
-		taskRepository.add(new Task(2, "Project \"Le Petit Lecteur\"", 
+		taskRepository.add(new Task(2, 0, "Project \"Le Petit Lecteur\"", 
 				"Side project to implement a bookmark and book list application",
 				Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.of(2022, 1, 31)), Priority.Medium));
 		

@@ -2,6 +2,6 @@ package com.lessayer.model;
 
 public enum Priority {
 	
-	Critical, High, Medium, Low
+	Low, Medium, High, Critical
 	
 }
