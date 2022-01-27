@@ -1,4 +1,4 @@
-package com.lessayer.model;
+package com.lessayer.entity;
 
 public enum Priority {
 	

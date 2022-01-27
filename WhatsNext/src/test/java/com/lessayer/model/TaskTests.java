@@ -13,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lessayer.entity.Priority;
+import com.lessayer.entity.Task;
+
 class TaskTests {
 	
 	static List<Task> taskRepository;
