@@ -6,19 +6,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lessayer.repository.TaskRepository;
+import com.lessayer.service.TaskListService;
 
 
 @Controller
 public class TaskListController {
 	
 	@Autowired
-	private TaskRepository taskRepository;
+	private TaskListService service;
 	
 	@GetMapping("/tasklist")
 	@ResponseBody
 	public String shwoTaskList() {
 		
-		return taskRepository.findAll().toString();
+		return "tests";
 		
 	}
 	
