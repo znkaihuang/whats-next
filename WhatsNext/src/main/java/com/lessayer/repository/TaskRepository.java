@@ -54,9 +54,9 @@ public class TaskRepository {
 		
 	}
 	
-	public void deleteTask(long userId) {
+	public void deleteTask(long taskId) {
 		
-		Task deletedTask = findByTaskId(userId);
+		Task deletedTask = findByTaskId(taskId);
 		entityManager.remove(deletedTask);
 		
 	}
