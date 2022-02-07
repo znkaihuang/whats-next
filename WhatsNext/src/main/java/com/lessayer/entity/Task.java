@@ -9,12 +9,20 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQuery(name="find_all_tasks", query="select p from Task p")
+@NamedQuery(name = "find_all_tasks", query = "select t from Task t")
+@NamedQuery(
+		name = "find_all_tasks_by_userID",
+        query = "select t from Task t where t.userId like :userId"
+)
+@NamedQuery(
+		name = "return_number_of_tasks",
+		query = "select count(t) from Task t"
+)
 public class Task {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long taskId;
+	private long taskId; // taskID increases monotonically
 	private long userId;
 	private String title;
 	private String description;
@@ -26,7 +34,8 @@ public class Task {
 		
 	}
 	
-	public Task(long userId, String title, String description, Date startDate, Date endDate,
+	public Task(long userId, String title, 
+			String description, Date startDate, Date endDate,
 			Priority priority) {
 		super();
 		this.userId = userId;
@@ -37,7 +46,8 @@ public class Task {
 		this.priority = priority;
 	}
 	
-	public Task(long taskId, long userId, String title, String description, Date startDate, Date endDate,
+	public Task(long taskId, long userId, String title,
+			String description, Date startDate, Date endDate,
 			Priority priority) {
 		super();
 		this.taskId = taskId;
@@ -59,7 +69,8 @@ public class Task {
 				+ "  state date=%s\n"
 				+ "  end date=%s\n"
 				+ "  priority=%s\n",
-				taskId, userId, title, description, startDate, endDate, priority);
+				taskId, userId, title, description, 
+				startDate, endDate, priority);
 		
 	}
 
