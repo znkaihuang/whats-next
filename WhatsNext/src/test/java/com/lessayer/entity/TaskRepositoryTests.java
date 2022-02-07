@@ -3,7 +3,6 @@ package com.lessayer.entity;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -11,10 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
-
 import com.lessayer.repository.TaskRepository;
 
 @SpringBootTest
@@ -22,7 +18,7 @@ class TaskRepositoryTests {
 	
 	static private Logger logger = LoggerFactory
 			.getLogger(TaskRepositoryTests.class);
-	static private List<Task> taskRepository;
+	// static private List<Task> taskRepository;
 	
 	@Autowired
 	private TaskRepository repository;
