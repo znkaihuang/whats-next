@@ -4,7 +4,6 @@
 		<title>Welcome</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-		
 	</head>
 	<body>
 	
@@ -13,10 +12,10 @@
 			<div class="navbar-collapse">
 				<ul class="nav nav-tabs">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="#">Home</a>
+						<a class="nav-link active" aria-current="page" href="/welcome">Home</a>
 				  	</li>
 				  	<li class="nav-item">
-				    	<a class="nav-link" href="#">Task list</a>
+				    	<a class="nav-link" href="/task-list">Task list</a>
 				  	</li>
 				  	<li class="nav-item">
 				    	<a class="nav-link" href="#">Logout</a>
@@ -27,10 +26,7 @@
 		
 		<p th:text="'Hello, ' + ${name} + '!'"/>
 		
-		<!-- 
-		<p data-th-text="#{home.welcome}">Welcome to our grocery store!</p>
-	 	-->
 	 	
-	<script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+		<script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 	</body>
 </html>
