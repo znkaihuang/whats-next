@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Welcome</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<!-- Navigation bar -->
+		<nav>
+			<div class="navbar-collapse">
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a class="nav-link" aria-current="page" href="/welcome">Home</a>
+				  	</li>
+				  	<li class="nav-item">
+				    	<a class="nav-link active" href="/task-list">Task list</a>
+				  	</li>
+				  	<li class="nav-item">
+				    	<a class="nav-link" href="#">Logout</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		
+		<form action="#" th:action="@{/add-task}" method="post">
+		  	<div class="mb-3">
+		    	<label class="form-label">Title</label>
+		    	<input type="text" class="form-control" name="title"
+		    		th:value="${updateTask} ?${updateTask.title} :''">
+		    	<div class="form-text">
+		    		Please enter the title of the task.
+		    	</div>
+		  	</div>
+		  	<div class="mb-3">
+		    	<label class="form-label">Description</label>
+		    	<input type="text" class="form-control" name="description"
+		    		th:value="${updateTask} ?${updateTask.description} :''">
+		    	<div class="form-text">
+		    		Give a brief description to the task.
+		    	</div>
+		  	</div>
+		  	<div class="mb-3">
+		    	<label class="form-label">Start date</label>
+		    	<input type="date" class="form-control" name="startDate"
+		    		th:value="${updateTask} ?${updateTask.startDate} :''">
+		    	<div class="form-text">
+		    		When is the start date of this task?
+		    	</div>
+		  	</div>
+		  	<div class="mb-3">
+		    	<label class="form-label">Start date</label>
+		    	<input type="date" class="form-control" name="endDate"
+		    		th:value="${updateTask} ?${updateTask.endDate} :''">
+		    	<div class="form-text">
+		    		When is the end date of this task?
+		    	</div>
+		  	</div>
+		  	<div class="mb-3">
+		    	<label class="form-label">Priority</label>
+				<select name="priority">
+					<option value="Critical">Critical</option>
+					<option value="High">High</option>
+					<option value="Medium">Medium</option>
+					<option value="Low">Low</option>
+				</select>
+		  	</div>
+		  	<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		
+	</body>
+</html>
