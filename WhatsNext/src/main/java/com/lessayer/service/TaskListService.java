@@ -20,7 +20,7 @@ public class TaskListService {
 	
 	private Long userId;
 	
-	void setUserId(Long userId) {
+	public void setUserId(Long userId) {
 		
 		this.userId = userId;
 		
@@ -72,7 +72,7 @@ public class TaskListService {
 		
 	}
 	
-	public List<Task> sortTasks(Comparator<Task> comparator) {
+	private List<Task> sortTasks(Comparator<Task> comparator) {
 		
 		List<Task> taskList = repository.findByUserId(userId);
 		taskList.sort(comparator);
