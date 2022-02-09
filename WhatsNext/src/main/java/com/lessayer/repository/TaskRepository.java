@@ -16,7 +16,7 @@ import com.lessayer.entity.Task;
 public class TaskRepository {
 	
 	@PersistenceContext
-	EntityManager entityManager;
+	private EntityManager entityManager;
 	
 	private TypedQuery<Task> query;
 	private TypedQuery<Long> countQuery;
