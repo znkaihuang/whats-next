@@ -30,6 +30,12 @@ public class UserService {
 		
 	}
 	
+	public List<User> retrieveAllUsers() {
+		
+		return repository.findByRole(Role.USER);
+		
+	}
+	
 	public boolean isUserExist(String userName) {
 		
 		return (retrieveUser(userName).isPresent()) ? true : false;
