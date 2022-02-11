@@ -129,7 +129,7 @@ class UserServiceTests {
 	@Test
 	void testUpdateEmail() {
 		
-		String userName = "Guest";
+		String userName = "Tam";
 		logger.info("Before update email {}", service.retrieveUser(userName)
 				.get().getEmail());
 		service.updateEmail(userName, "guest@test.com");

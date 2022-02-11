@@ -45,21 +45,15 @@ class UserRepositoryTests {
 	}
 	
 	@Test
-	void testCreateUser() {
+	void testCreateAndDeleteUser() {
 		
 		User user = new User("Guest", "guest", "", Role.GUEST, 
 				Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));		
 		repository.createUser(user);
 		logger.info("Create user {}", user);
-		
-	}
 
-	@Test
-	void testDeleteUser() {
-		
 		String userName = "Guest";
-		User user = repository.findByUserName(userName).get();
-		repository.deleteUser(user.getUserId());
+		repository.deleteUser(repository.findByUserName(userName).get().getUserId());
 		logger.info("Delete user {}", user);
 		
 	}
@@ -67,7 +61,7 @@ class UserRepositoryTests {
 	@Test
 	void testUpdateUser() {
 		
-		String userName = "Guest";
+		String userName = "Tam";
 		User user = repository.findByUserName(userName).get();
 		user.setPassword("guest");
 		repository.updateUser(user);

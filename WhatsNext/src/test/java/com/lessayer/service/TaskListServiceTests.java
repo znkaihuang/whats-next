@@ -51,7 +51,7 @@ class TaskListServiceTests {
 	@Test
 	void retrieveTaskByIdTest() {
 		
-		Long taskId = 1L;
+		Long taskId = service.retrieveTasks().get().get(0).getTaskId();
 		if(service.retrieveTaskById(taskId).isPresent()) {
 			
 			logger.info("Task id {}: {}", taskId, 
@@ -67,7 +67,7 @@ class TaskListServiceTests {
 	}
 	
 	@Test
-	void createTaskTest() {
+	void createUpdateAndDeleteTaskTest() {
 		
 		String title = "Learn Spring Boot";
 		String description = "Can establish java project with Spring Boot easily";
@@ -80,12 +80,7 @@ class TaskListServiceTests {
 		logger.info("Successfully create task. The task ID is {}.", taskId);
 		logger.info("The content of created task: {}", service.retrieveTaskById(taskId));
 		
-	}
-	
-	@Test
-	void updateTaskTest() {
 		
-		Long taskId = 1L;
 		Task updateTask = service.retrieveTaskById(taskId).get();
 		logger.info("Before update. Task id {}: {}", taskId, updateTask);
 		updateTask.setTitle("Learn French grammar");
@@ -98,12 +93,7 @@ class TaskListServiceTests {
 		logger.info("After update. Task id {}: {}", taskId, 
 				service.retrieveTaskById(taskId).get());
 		
-	}
-	
-	@Test
-	void deleteTaskTest() {
 		
-		Long taskId = 2L;
 		logger.info("Before delete task id {}: {}", taskId, service.retrieveTasks());
 		service.deleteTask(taskId);
 		logger.info("After delete task id {}: {}", taskId, service.retrieveTasks());

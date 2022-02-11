@@ -68,34 +68,33 @@ class TaskRepositoryTests {
 	}
 	
 	@Test
-	void createTaskTest() {
+	void createAndDeleteTaskTest() {
 		
-		Task task = new Task(2, "Learn French", "test", 
+		Task task = new Task(2, "Learn Something", "test", 
 				Date.valueOf(LocalDate.now()),
 				Date.valueOf("2022-03-12"),
 				Priority.High);
 		repository.createTask(task);
 		logger.info("Create task: {}", repository.findByUserId(2));
 		
-	}
-	
-	@Test
-	void deleteTaskTest() {
-		
 		Long userId = 2L;
 		logger.info("Find tasks with user id 2: {}", 
 				repository.findByUserId(userId));
 		
-		List<Task> deletedTasks = repository.findByUserId(userId);
-		for(Task deletedTask : deletedTasks) {
+		List<Task> tasks = repository.findByUserId(userId);
+		for(Task deletedTask : tasks) {
 			
-			repository.deleteTask(deletedTask.getTaskId());
+			if(deletedTask.getTitle().compareTo("Learn Something") == 0) {
+				
+				repository.deleteTask(deletedTask.getTaskId());
+				
+			}
 			
 		}
 		
-		logger.info("Delete all tasks with user id 2.");
+		logger.info("Delete task.");
 		logger.info("Find tasks with user id 2: {}", 
-				repository.findByUserId(userId));
+		repository.findByUserId(userId));
 		
 	}
 	
