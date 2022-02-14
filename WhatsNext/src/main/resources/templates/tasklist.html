@@ -24,7 +24,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="task, status: ${tasks}">
-					<th scope="row" th:text="${status.index}+1"></td>
+					<th scope="row" th:text="${status.index}+1"/>
 					<td th:text="${task.title}"></td>
 					<td th:text="${task.description}"></td>
 					<td th:text="${task.startDate}"></td>
