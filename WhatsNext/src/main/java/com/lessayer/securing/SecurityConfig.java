@@ -33,10 +33,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.authorizeRequests()
-				.anyRequest()
+				.antMatchers("/login", "/logout", "/webjars/**")
+				.permitAll()
+				.antMatchers("/**")
 				.authenticated()
 				.and()
+			.formLogin(form -> form
+				.loginPage("/login")
+				.failureUrl("/login?error")
+				.permitAll()
+					)
 			.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/login?logout")
 				.permitAll();
 		http.formLogin();
 		http.httpBasic();
