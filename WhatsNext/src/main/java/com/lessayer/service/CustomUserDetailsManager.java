@@ -38,7 +38,7 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 							.password(admin.getPassword())
 							.roles("ADMIN")
 							.build());
-			logger.info("user {}\n password {}", admin.getUserName(), admin.getPassword());
+			// logger.info("user {}\n password {}", admin.getUserName(), admin.getPassword());
 		
 		}
 		
@@ -50,7 +50,7 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 							.password(user.getPassword())
 							.roles("USER")
 							.build());
-			logger.info("user {}\n password {}", user.getUserName(), user.getPassword());
+			// logger.info("user {}\n password {}", user.getUserName(), user.getPassword());
 			
 		}
 		
