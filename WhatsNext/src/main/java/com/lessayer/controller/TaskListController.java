@@ -26,18 +26,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.entity.Priority;
 import com.lessayer.entity.Task;
 import com.lessayer.service.TaskListService;
+import com.lessayer.service.UserService;
 
 
 
 @Controller
+@SessionAttributes({"userName", "isAdmin"})
 public class TaskListController {
 	
 	@Autowired
-	private TaskListService service;
+	private TaskListService taskService;
+	@Autowired
+	private UserService userService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -60,7 +65,7 @@ public class TaskListController {
 			@RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam String priority) {
 		
-		service.createTask(title, description, 
+		taskService.createTask(title, description, 
 				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority));
 		return "redirect:/task-list";
 		
@@ -69,7 +74,7 @@ public class TaskListController {
 	@GetMapping("/delete-task")
 	public String deleteTask(@RequestParam Long taskId) {
 		
-		service.deleteTask(taskId);
+		taskService.deleteTask(taskId);
 		return "redirect:/task-list";
 		
 	}
@@ -77,9 +82,9 @@ public class TaskListController {
 	@GetMapping("/update-task")
 	public String showUpdateTask(@RequestParam Long taskId, ModelMap model) {
 		
-		Task task = service.retrieveTaskById(taskId).get();
+		Task task = taskService.retrieveTaskById(taskId).get();
 		model.put("updateTask", task);
-		service.deleteTask(taskId);
+		taskService.deleteTask(taskId);
 		return "updatetask";
 		
 	}
@@ -87,9 +92,11 @@ public class TaskListController {
 	
 	@ModelAttribute("tasks")
 	public List<Task> populateTasks(Principal principal) {
-		service.setUserId(2L);
-		logger.info("Current user is {}", principal.getName());
-		return service.retrieveTasks().get();
+		
+		Long userId = userService.retrieveUser(principal.getName()).get().getUserId();
+		taskService.setUserId(userId);
+		// logger.info("Current user is {}", principal.getName());
+		return taskService.retrieveTasks().get();
 		
 	}
 }
