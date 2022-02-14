@@ -16,6 +16,9 @@
 					  	<li class="nav-item">
 					    	<a class="nav-link" href="/task-list">Task list</a>
 					  	</li>
+					  	<li th:if="${isAdmin} == true">
+							<a class="nav-link" href="/user-list">Admin page</a>
+						</li>
 					  	<li class="nav-item">
 					    	<a class="nav-link" href="/logout">Logout</a>
 						</li>
