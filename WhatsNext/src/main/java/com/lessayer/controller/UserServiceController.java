@@ -1,7 +1,5 @@
 package com.lessayer.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.entity.User;
+import com.lessayer.service.MailService;
 import com.lessayer.service.UserService;
 
 @Controller
@@ -21,10 +20,21 @@ public class UserServiceController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	MailService mailService;
+	
 	@GetMapping("/user-list")
 	public String showUserList() {
 		
 		return "userlist";
+		
+	}
+	
+	@GetMapping("/send-mail")
+	public String sendMail() {
+		
+		// mailService.sendSimpleMessage("test", "test", "test");
+		return "mail";
 		
 	}
 	
