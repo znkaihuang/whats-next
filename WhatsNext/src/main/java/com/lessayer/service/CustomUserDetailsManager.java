@@ -110,6 +110,10 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 		
 		return users.containsKey(username);
 	}
+
+	public UserService getService() {
+		return service;
+	}
 	
 	
 }
