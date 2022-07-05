@@ -29,6 +29,7 @@ public class Task {
 	private Date startDate;
 	private Date endDate;
 	private Priority priority;
+	private TaskStatus status;
 	
 	public Task() {
 		
@@ -44,6 +45,7 @@ public class Task {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
+		this.status = TaskStatus.NEW;
 	}
 	
 	public Task(long taskId, long userId, String title,
@@ -57,6 +59,7 @@ public class Task {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
+		this.status = TaskStatus.NEW;
 	}
 	
 	@Override
@@ -68,9 +71,10 @@ public class Task {
 				+ "  descriptio=%s\n"
 				+ "  state date=%s\n"
 				+ "  end date=%s\n"
-				+ "  priority=%s\n",
+				+ "  priority=%s\n"
+				+ "  status=%s\n",
 				taskId, userId, title, description, 
-				startDate, endDate, priority);
+				startDate, endDate, priority, status);
 		
 	}
 
@@ -144,5 +148,12 @@ public class Task {
 		this.priority = priority;
 	}
 
+	public TaskStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TaskStatus status) {
+		this.status = status;
+	}
 	
 }
