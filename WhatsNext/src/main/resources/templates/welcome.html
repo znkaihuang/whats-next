@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>Welcome</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-	</head>
+	<head th:replace="fragments :: head ('What\'s Next')"></head>
 	<body>
-	
-		<div th:insert="~{navigation :: navbar}"></div>
-		
-		<div th:if="${isAdmin} == true">
-			<p> Hello, administrator! </p>
-		</div>
-		
-		<div>
-			<p th:text="'Hello, ' + ${userName} + '!'"/>
-		</div>
+		<div th:replace="fragments :: navbar"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-12 mt-4">
+					<h4 style="font-weight: bold;">Welcome back, [[${userName}]]!</h5>
+				</div>
+				<div th:replace="fragments :: collapsible-tasks ('Recent tasks')"></div>
+				<div th:replace="fragments :: collapsible-tasks ('Critical tasks')"></div>
+				<div th:replace="fragments :: collapsible-tasks ('On-going tasks')"></div>
+				<div th:replace="fragments :: collapsible-tasks ('Pending tasks')"></div>
+	 		</div>
+	 	</div>
 	 	
 		<script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+		<script src="js/common.js"></script>
 	</body>
 </html>
