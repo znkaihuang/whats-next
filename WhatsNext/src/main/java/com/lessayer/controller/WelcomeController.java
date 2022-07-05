@@ -30,6 +30,7 @@ public class WelcomeController {
 							? true : false;
 		model.put("userName", userName);
 		model.put("isAdmin", isAdmin);
+		model.put("currentPage", "home");
 		
 		return "welcome";
 		

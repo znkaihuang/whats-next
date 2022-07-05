@@ -2,24 +2,14 @@ package com.lessayer.controller;
 
 import java.security.Principal;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.memory.UserAttribute;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,14 +37,18 @@ public class TaskListController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping("/task-list")
-	public String shwoTaskList() {
+	public String shwoTaskList(ModelMap model) {
+		
+		model.put("currentPage", "task-list");
 		
 		return "tasklist";
 		
 	}
 	
 	@GetMapping("/add-task")
-	public String showAddTaskPage() {
+	public String showAddTaskPage(ModelMap model) {
+		
+		model.put("currentPage", "task-list");
 		
 		return "updatetask";
 		
@@ -67,6 +61,7 @@ public class TaskListController {
 		
 		taskService.createTask(title, description, 
 				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority));
+		
 		return "redirect:/task-list";
 		
 	}
@@ -75,6 +70,7 @@ public class TaskListController {
 	public String deleteTask(@RequestParam Long taskId) {
 		
 		taskService.deleteTask(taskId);
+		
 		return "redirect:/task-list";
 		
 	}
@@ -83,8 +79,11 @@ public class TaskListController {
 	public String showUpdateTask(@RequestParam Long taskId, ModelMap model) {
 		
 		Task task = taskService.retrieveTaskById(taskId).get();
-		model.put("updateTask", task);
 		taskService.deleteTask(taskId);
+		
+		model.put("updateTask", task);
+		model.put("currentPage", "task-list");
+		
 		return "updatetask";
 		
 	}
@@ -95,7 +94,7 @@ public class TaskListController {
 		
 		Long userId = userService.retrieveUser(principal.getName()).get().getUserId();
 		taskService.setUserId(userId);
-		// logger.info("Current user is {}", principal.getName());
+
 		return taskService.retrieveTasks().get();
 		
 	}
