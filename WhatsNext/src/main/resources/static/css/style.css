@@ -10,7 +10,8 @@
 	color: #555753;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
 	color: white;
 	background-color: #555753;
 }
@@ -61,4 +62,14 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-} 
+}
+
+.table {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.form,
+.form .form-control {
+  font-size: 18px;
+}
