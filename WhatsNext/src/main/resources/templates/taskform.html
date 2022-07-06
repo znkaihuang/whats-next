@@ -6,6 +6,8 @@
 	<div th:insert="fragments :: navbar"></div>
 	<div class="container">
 		<form class="my-4 form" th:action="@{/add-task}" method="post">
+			<input type="hidden" name="taskId" th:value="${updateTask} ? ${updateTask.taskId} : null">
+			<input type="hidden" name="userId" th:value="${updateTask} ? ${updateTask.userId} : null">
 			<div class="row justify-content-center">
 				<div class="col-12 mb-3">
 					<label class="form-label">Title</label> <input type="text"
@@ -19,7 +21,7 @@
 					<label class="form-label">Description</label>
 					<textarea class="form-control" id="description" name="description"
 						maxlength="250" required="required"
-						th:text="${updateTask} ?${updateTask.title} :''"></textarea>
+						th:text="${updateTask} ?${updateTask.description} :''"></textarea>
 					<div class="form-text">Give a brief description to the task.
 						No more than 250 characters.</div>
 				</div>
