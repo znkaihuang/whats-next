@@ -1,58 +1,90 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>Welcome</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-	</head>
-	<body>
-		
-		<div th:insert="~{navigation :: navbar}"></div>
-		
-		<form action="#" th:action="@{/add-task}" method="post">
-		  	<div class="mb-3">
-		    	<label class="form-label">Title</label>
-		    	<input type="text" class="form-control" name="title"
-		    		th:value="${updateTask} ?${updateTask.title} :''">
-		    	<div class="form-text">
-		    		Please enter the title of the task.
-		    	</div>
-		  	</div>
-		  	<div class="mb-3">
-		    	<label class="form-label">Description</label>
-		    	<input type="text" class="form-control" name="description"
-		    		th:value="${updateTask} ?${updateTask.description} :''">
-		    	<div class="form-text">
-		    		Give a brief description to the task.
-		    	</div>
-		  	</div>
-		  	<div class="mb-3">
-		    	<label class="form-label">Start date</label>
-		    	<input type="date" class="form-control" name="startDate"
-		    		th:value="${updateTask} ?${updateTask.startDate} :''">
-		    	<div class="form-text">
-		    		When is the start date of this task?
-		    	</div>
-		  	</div>
-		  	<div class="mb-3">
-		    	<label class="form-label">End date</label>
-		    	<input type="date" class="form-control" name="endDate"
-		    		th:value="${updateTask} ?${updateTask.endDate} :''">
-		    	<div class="form-text">
-		    		When is the end date of this task?
-		    	</div>
-		  	</div>
-		  	<div class="mb-3">
-		    	<label class="form-label">Priority</label>
-				<select name="priority">
-					<option value="Critical">Critical</option>
-					<option value="High">High</option>
-					<option value="Medium">Medium</option>
-					<option value="Low">Low</option>
-				</select>
-		  	</div>
-		  	<button type="submit" class="btn btn-primary">Submit</button>
+<head
+	th:replace="fragments :: head ('What\'s next - ' + ${taskFormTitle})"></head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+	<div class="container">
+		<form class="my-4 form" th:action="@{/add-task}" method="post">
+			<div class="row justify-content-center">
+				<div class="col-12 mb-3">
+					<label class="form-label">Title</label> <input type="text"
+						class="form-control" name="title"
+						th:value="${updateTask} ?${updateTask.title} :''" maxlength="100"
+						required="required">
+					<div class="form-text">Please enter the title of the task. No
+						more than 100 characters.</div>
+				</div>
+				<div class="col-12 mb-3">
+					<label class="form-label">Description</label>
+					<textarea class="form-control" id="description" name="description"
+						maxlength="250" required="required"
+						th:text="${updateTask} ?${updateTask.title} :''"></textarea>
+					<div class="form-text">Give a brief description to the task.
+						No more than 250 characters.</div>
+				</div>
+				<div class="col-3 mb-3">
+					<label class="form-label">Start date</label> <input type="date"
+						class="form-control" name="startDate"
+						th:value="${updateTask} ?${updateTask.startDate} :''"
+						required="required">
+					<div class="form-text">When is the start date of this task?</div>
+				</div>
+				<div class="col-3 mb-3">
+					<label class="form-label">End date</label> <input type="date"
+						class="form-control" name="endDate"
+						th:value="${updateTask} ?${updateTask.endDate} :''"
+						required="required">
+					<div class="form-text">When is the end date of this task?</div>
+				</div>
+				<div class="col-3 mb-3">
+					<label class="form-label">Priority</label> <select
+						class="form-select" name="priority" th:unless="${updateTask}">
+						<option value="CRITICAL">CRITICAL</option>
+						<option value="HIGH">HIGH</option>
+						<option value="MEDIUM">MEDIUM</option>
+						<option value="LOW">LOW</option>
+					</select>
+					<select
+						class="form-select" name="priority" th:if="${updateTask}">
+						<option value="CRITICAL" th:selected="${updateTask.priorityString == 'CRITICAL'}">CRITICAL</option>
+						<option value="HIGH" th:selected="${updateTask.priorityString == 'HIGH'}">HIGH</option>
+						<option value="MEDIUM" th:selected="${updateTask.priorityString == 'MEDIUM'}">MEDIUM</option>
+						<option value="LOW" th:selected="${updateTask.priorityString == 'LOW'}">LOW</option>
+					</select>
+					<div class="form-text">Choose a priority for the task.</div>
+				</div>
+				<div class="col-3 mb-3">
+					<label class="form-label">Status</label> <select
+						class="form-select" name="status" th:unless="${updateTask}">
+						<option value="NEW" selected="selected">NEW</option>
+						<option value="ON_GOING"
+							th:hidden="${updateTask} ? 'false' : 'true'">ON GOING</option>
+						<option value="PENDING"
+							th:hidden="${updateTask} ? 'false' : 'true'">PENDING</option>
+						<option value="FINISHED"
+							th:hidden="${updateTask} ? 'false' : 'true'">FINISHED</option>
+					</select>
+					<select
+						class="form-select" name="status" th:if="${updateTask}">
+						<option value="NEW" th:selected="${updateTask.statusString == 'NEW'}">NEW</option>
+						<option value="ON_GOING"
+							 th:selected="${updateTask.statusString == 'ON GOING'}">ON GOING</option>
+						<option value="PENDING"
+							 th:selected="${updateTask.statusString == 'PENDING'}">PENDING</option>
+						<option value="FINISHED"
+							 th:selected="${updateTask.statusString == 'FINISHED'}">FINISHED</option>
+					</select>
+					<div class="form-text">Choose a status for the task.</div>
+				</div>
+				<div class="col-4 my-3 d-grid mx-auto">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<a class=" d-grid my-3" th:href="@{task-list}"
+						style="text-decoration: none;"><button type="button"
+							class="btn btn-danger">Cancel</button></a>
+				</div>
+			</div>
 		</form>
-		
-	</body>
+	</div>
+</body>
 </html>

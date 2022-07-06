@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.entity.Priority;
 import com.lessayer.entity.Task;
+import com.lessayer.entity.TaskStatus;
 import com.lessayer.service.TaskListService;
 import com.lessayer.service.UserService;
 
@@ -48,19 +49,20 @@ public class TaskListController {
 	@GetMapping("/add-task")
 	public String showAddTaskPage(ModelMap model) {
 		
+		model.put("taskFormTitle", "New Task");
 		model.put("currentPage", "task-list");
 		
-		return "updatetask";
+		return "taskform";
 		
 	}
 	
 	@PostMapping("/add-task")
 	public String createTask(@RequestParam String title, @RequestParam String description,
 			@RequestParam String startDate, @RequestParam String endDate,
-			@RequestParam String priority) {
+			@RequestParam String priority, @RequestParam String status) {
 		
 		taskService.createTask(title, description, 
-				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority));
+				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
 		
 		return "redirect:/task-list";
 		
@@ -79,12 +81,12 @@ public class TaskListController {
 	public String showUpdateTask(@RequestParam Long taskId, ModelMap model) {
 		
 		Task task = taskService.retrieveTaskById(taskId).get();
-		taskService.deleteTask(taskId);
 		
 		model.put("updateTask", task);
+		model.put("taskFormTitle", "Update Task");
 		model.put("currentPage", "task-list");
 		
-		return "updatetask";
+		return "taskform";
 		
 	}
 	
