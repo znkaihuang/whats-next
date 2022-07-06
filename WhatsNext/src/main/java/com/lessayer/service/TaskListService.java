@@ -20,6 +20,8 @@ public class TaskListService {
 	private TaskRepository repository;
 	
 	private Long userId;
+	private List<Task> taskListCache;
+	private Boolean updateCache = false;
 	
 	public void setUserId(Long userId) {
 		
@@ -29,8 +31,16 @@ public class TaskListService {
 	
 	public Optional<List<Task>> retrieveTasks() {
 		
-		return Optional.ofNullable(repository.findByUserId(this.userId));
-		
+		Optional<List<Task>> taskListCacheOptional = Optional.ofNullable(taskListCache);
+		if (taskListCacheOptional.isEmpty() || updateCache) {
+			taskListCache = repository.findByUserId(this.userId);
+			updateCache = false;
+			
+			return Optional.ofNullable(taskListCache);
+		}
+		else {
+			return taskListCacheOptional;
+		}
 	}
 	
 	// To prevent accessing other user's tasks, would check the user id first.
@@ -54,6 +64,8 @@ public class TaskListService {
 			Date startDate, Date endDate, Priority priority, TaskStatus status) {
 		
 		Task task = new Task(userId, title, description, startDate, endDate, priority, status);
+		updateCache = true;
+		
 		return repository.createTask(task).getTaskId();
 		
 	}
@@ -61,15 +73,22 @@ public class TaskListService {
 	public void updateTask(long taskId, String title, String description, 
 			Date startDate, Date endDate, Priority priority, TaskStatus status) {
 		
-		Task task = new Task(taskId, userId, title, description,
-								startDate, endDate, priority, status);
+		Task task = repository.findByTaskId(taskId);
+		task.setTitle(title);
+		task.setDescription(description);
+		task.setStartDate(startDate);
+		task.setEndDate(endDate);
+		task.setPriority(priority);
+		task.setStatus(status);
 		repository.updateTask(task);
+		updateCache = true;
 		
 	}
 
 	public void deleteTask(Long taskId) {
 		
 		repository.deleteTask(taskId);
+		updateCache = true;
 		
 	}
 	
