@@ -6,13 +6,10 @@ import java.util.List;
 
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +32,7 @@ public class TaskListController {
 	@Autowired
 	private UserService userService;
 	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Integer pageNum;
 	
 	@GetMapping("/task-list")
 	public String shwoTaskList(ModelMap model, Principal principal) {
@@ -48,10 +45,13 @@ public class TaskListController {
 	public String showTaskListByPage(ModelMap model, Principal principal,
 		@PathVariable(name = "pageNum") Integer pageNum) {
 		
+		this.pageNum = pageNum;
+		
 		model.put("tasks", populateTasks(principal, pageNum));
 		model.put("currentPage", "task-list");
 		model.put("pageNum", pageNum);
-		
+		model.put("totalPage", populateTotalPage());
+
 		return "tasklist";
 		
 	}
@@ -72,17 +72,25 @@ public class TaskListController {
 			@RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam String priority, @RequestParam String status) {
 		
-		logger.info("Task ID: " + taskId + " UserID: " + userId);
 		if (!taskId.isEmpty()) {
 			taskService.updateTask(Long.valueOf(taskId), title, description,
 				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
+			
+			return "redirect:/task-list/" + pageNum;
 		}
 		else {
 			taskService.createTask(title, description, 
 				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
+			
+			Integer totalTaskNum = taskService.getTotalTaskNum();
+			Integer totalPage = taskService.getTotalPage();
+			
+			if ((totalTaskNum + 1) % taskService.TASKS_PER_PAGE == 1) {
+				totalPage++;
+			}
+			
+			return "redirect:/task-list/" + totalPage;
 		}
-		
-		return "redirect:/task-list";
 		
 	}
 	
@@ -90,8 +98,13 @@ public class TaskListController {
 	public String deleteTask(@RequestParam Long taskId) {
 		
 		taskService.deleteTask(taskId);
+		Integer taskNum = taskService.getTotalTaskNum();
+		Integer totalPage = taskService.getTotalPage();
+		if (((taskNum - 1) % taskService.TASKS_PER_PAGE) == 0 && pageNum == totalPage && pageNum != 1) {
+			pageNum--;
+		}
 		
-		return "redirect:/task-list";
+		return "redirect:/task-list/"  + pageNum;
 		
 	}
 	
@@ -103,6 +116,7 @@ public class TaskListController {
 		model.put("updateTask", task);
 		model.put("taskFormTitle", "Update Task");
 		model.put("currentPage", "task-list");
+		model.put("pageNum", pageNum);
 		
 		return "taskform";
 		
@@ -116,7 +130,6 @@ public class TaskListController {
 		return taskService.retrieveTasksByPage(pageNum).get();
 	}
 	
-	@ModelAttribute("totalPage")
 	public Integer populateTotalPage() {
 		return taskService.getTotalPage();
 	}

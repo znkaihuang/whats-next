@@ -35,7 +35,7 @@
 		<div class="d-flex justify-content-center mx-auto my-4">
 			<a href="/add-task" class="btn btn-primary w-25">Add New Task</a>
 		</div>
-		<div class="d-flex justify-content-center mx-auto page-nav-bar my-4">
+		<div class="d-flex justify-content-center mx-auto page-nav-bar my-4" th:if="${totalPage > 1}">
 			<a th:href="@{/task-list/1}">&laquo;</a>
 			<th:block th:each="number : ${#numbers.sequence(1, totalPage)}">
 				<a th:href="@{/task-list/} + ${number}" th:classappend="${number == pageNum} ? 'active' : ''" hidden="hidden">[[${number}]]</a>
@@ -49,10 +49,11 @@
 	<script>
 		var pageNum = parseInt('[[${pageNum}]]');
 		var totalPage = parseInt('[[${totalPage}]]');
-		var pageBarDiv = document.getElementsByClassName('page-nav-bar')[0];
-		for ( i = Math.max(1, pageNum - 1); i <= Math.min(totalPage, pageNum + 1); i++) {
-			console.log(i);
-			pageBarDiv.children[i].removeAttribute('hidden');
+		if (totalPage > 1) {
+			var pageBarDiv = document.getElementsByClassName('page-nav-bar')[0];
+			for ( i = Math.max(1, pageNum - 1); i <= Math.min(totalPage, pageNum + 1); i++) {
+				pageBarDiv.children[i].removeAttribute('hidden');
+			}
 		}
 	</script>
 </body>
