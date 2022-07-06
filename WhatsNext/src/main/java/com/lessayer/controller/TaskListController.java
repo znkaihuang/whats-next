@@ -9,11 +9,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -35,12 +35,22 @@ public class TaskListController {
 	@Autowired
 	private UserService userService;
 	
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping("/task-list")
-	public String shwoTaskList(ModelMap model) {
+	public String shwoTaskList(ModelMap model, Principal principal) {
 		
+		return "redirect:/task-list/1";
+		
+	}
+	
+	@GetMapping("/task-list/{pageNum}")
+	public String showTaskListByPage(ModelMap model, Principal principal,
+		@PathVariable(name = "pageNum") Integer pageNum) {
+		
+		model.put("tasks", populateTasks(principal, pageNum));
 		model.put("currentPage", "task-list");
+		model.put("pageNum", pageNum);
 		
 		return "tasklist";
 		
@@ -57,12 +67,20 @@ public class TaskListController {
 	}
 	
 	@PostMapping("/add-task")
-	public String createTask(@RequestParam String title, @RequestParam String description,
+	public String createTask(String taskId, String userId,
+			@RequestParam String title, @RequestParam String description,
 			@RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam String priority, @RequestParam String status) {
 		
-		taskService.createTask(title, description, 
+		logger.info("Task ID: " + taskId + " UserID: " + userId);
+		if (!taskId.isEmpty()) {
+			taskService.updateTask(Long.valueOf(taskId), title, description,
 				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
+		}
+		else {
+			taskService.createTask(title, description, 
+				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
+		}
 		
 		return "redirect:/task-list";
 		
@@ -90,14 +108,17 @@ public class TaskListController {
 		
 	}
 	
-	
-	@ModelAttribute("tasks")
-	public List<Task> populateTasks(Principal principal) {
+	public List<Task> populateTasks(Principal principal, Integer pageNum) {
 		
 		Long userId = userService.retrieveUser(principal.getName()).get().getUserId();
 		taskService.setUserId(userId);
-
-		return taskService.retrieveTasks().get();
 		
+		return taskService.retrieveTasksByPage(pageNum).get();
 	}
+	
+	@ModelAttribute("totalPage")
+	public Integer populateTotalPage() {
+		return taskService.getTotalPage();
+	}
+	
 }

@@ -22,6 +22,8 @@ public class TaskListService {
 	private Long userId;
 	private List<Task> taskListCache;
 	private Boolean updateCache = false;
+	private final Integer TASKS_PER_PAGE = 8;
+	private Integer totalPage;
 	
 	public void setUserId(Long userId) {
 		
@@ -34,6 +36,7 @@ public class TaskListService {
 		Optional<List<Task>> taskListCacheOptional = Optional.ofNullable(taskListCache);
 		if (taskListCacheOptional.isEmpty() || updateCache) {
 			taskListCache = repository.findByUserId(this.userId);
+			totalPage = (taskListCache.size() / TASKS_PER_PAGE) + 1;
 			updateCache = false;
 			
 			return Optional.ofNullable(taskListCache);
@@ -41,6 +44,23 @@ public class TaskListService {
 		else {
 			return taskListCacheOptional;
 		}
+	}
+	
+	public Optional<List<Task>> retrieveTasksByPage(Integer pageNum) {
+		
+		Optional<List<Task>> taskListOptional = retrieveTasks();
+		if (taskListOptional.isEmpty()) {
+			return taskListOptional;
+		}
+		else {
+			return Optional.ofNullable(taskListOptional.get().subList((pageNum - 1) * TASKS_PER_PAGE, 
+					Math.min(taskListOptional.get().size(), pageNum * TASKS_PER_PAGE)));
+		}
+		
+	}
+	
+	public Integer getTotalPage() {
+		return totalPage;
 	}
 	
 	// To prevent accessing other user's tasks, would check the user id first.

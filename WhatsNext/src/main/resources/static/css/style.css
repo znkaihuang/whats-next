@@ -64,6 +64,17 @@
   transition: max-height 0.2s ease-out;
 }
 
+.page-nav-bar a {
+  padding: 0px 8px;
+  font-size: 18px;
+  color: #555753;
+  text-decoration: none;
+}
+
+.page-nav-bar a.active {
+  text-decoration: underline;
+}
+
 .table {
   font-size: 18px;
   vertical-align: middle;
