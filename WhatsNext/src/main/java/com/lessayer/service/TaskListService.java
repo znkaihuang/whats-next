@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.lessayer.entity.Priority;
 import com.lessayer.entity.Task;
+import com.lessayer.entity.TaskStatus;
 import com.lessayer.repository.TaskRepository;
 
 @Service
@@ -50,18 +51,18 @@ public class TaskListService {
 	}
 
 	public Long createTask(String title, String description, 
-			Date startDate, Date endDate, Priority priority) {
+			Date startDate, Date endDate, Priority priority, TaskStatus status) {
 		
-		Task task = new Task(userId, title, description, startDate, endDate, priority);
+		Task task = new Task(userId, title, description, startDate, endDate, priority, status);
 		return repository.createTask(task).getTaskId();
 		
 	}
 
 	public void updateTask(long taskId, String title, String description, 
-			Date startDate, Date endDate, Priority priority) {
+			Date startDate, Date endDate, Priority priority, TaskStatus status) {
 		
 		Task task = new Task(taskId, userId, title, description,
-								startDate, endDate, priority);
+								startDate, endDate, priority, status);
 		repository.updateTask(task);
 		
 	}
