@@ -37,7 +37,7 @@ public class Task {
 	
 	public Task(long userId, String title, 
 			String description, Date startDate, Date endDate,
-			Priority priority) {
+			Priority priority, TaskStatus status) {
 		super();
 		this.userId = userId;
 		this.title = title;
@@ -45,12 +45,12 @@ public class Task {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
-		this.status = TaskStatus.NEW;
+		this.status = status;
 	}
 	
 	public Task(long taskId, long userId, String title,
 			String description, Date startDate, Date endDate,
-			Priority priority) {
+			Priority priority, TaskStatus status) {
 		super();
 		this.taskId = taskId;
 		this.userId = userId;
@@ -59,7 +59,7 @@ public class Task {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
-		this.status = TaskStatus.NEW;
+		this.status = status;
 	}
 	
 	@Override
@@ -147,13 +147,21 @@ public class Task {
 	
 		this.priority = priority;
 	}
-
+	
+	public String getPriorityString() {
+		return this.priority.getString();
+	}
+	
 	public TaskStatus getStatus() {
 		return status;
 	}
 
 	public void setStatus(TaskStatus status) {
 		this.status = status;
+	}
+	
+	public String getStatusString() {
+		return this.status.getString();
 	}
 	
 }
