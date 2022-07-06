@@ -81,7 +81,7 @@
 				</div>
 				<div class="col-4 my-3 d-grid mx-auto">
 					<button type="submit" class="btn btn-primary">Submit</button>
-					<a class=" d-grid my-3" th:href="@{task-list}"
+					<a class=" d-grid my-3" th:href="@{/task-list/} + ${pageNum}"
 						style="text-decoration: none;"><button type="button"
 							class="btn btn-danger">Cancel</button></a>
 				</div>
