@@ -73,7 +73,7 @@ class TaskRepositoryTests {
 		Task task = new Task(2, "Learn Something", "test", 
 				Date.valueOf(LocalDate.now()),
 				Date.valueOf("2022-03-12"),
-				Priority.High);
+				Priority.HIGH, TaskStatus.NEW);
 		repository.createTask(task);
 		logger.info("Create task: {}", repository.findByUserId(2));
 		

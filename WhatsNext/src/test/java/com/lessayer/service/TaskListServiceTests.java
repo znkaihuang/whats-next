@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.lessayer.entity.Priority;
 import com.lessayer.entity.Task;
+import com.lessayer.entity.TaskStatus;
 
 
 @SpringBootTest
@@ -73,10 +74,11 @@ class TaskListServiceTests {
 		String description = "Can establish java project with Spring Boot easily";
 		Date startDate = Date.valueOf("2021-12-31");
 		Date endDate = Date.valueOf("2022-03-20");
-		Priority priority = Priority.Critical;
+		Priority priority = Priority.CRITICAL;
+		TaskStatus status = TaskStatus.NEW;
 		
 		Long taskId = service.createTask(title, description, 
-									startDate, endDate, priority);
+									startDate, endDate, priority, status);
 		logger.info("Successfully create task. The task ID is {}.", taskId);
 		logger.info("The content of created task: {}", service.retrieveTaskById(taskId));
 		
@@ -88,7 +90,7 @@ class TaskListServiceTests {
 		
 		service.updateTask(updateTask.getTaskId(), updateTask.getTitle(), 
 					updateTask.getDescription(), updateTask.getStartDate(),
-					updateTask.getEndDate(), updateTask.getPriority());
+					updateTask.getEndDate(), updateTask.getPriority(), updateTask.getStatus());
 		
 		logger.info("After update. Task id {}: {}", taskId, 
 				service.retrieveTaskById(taskId).get());
