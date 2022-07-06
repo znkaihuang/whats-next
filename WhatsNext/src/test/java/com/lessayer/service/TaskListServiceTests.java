@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.lessayer.entity.Priority;
@@ -24,8 +25,12 @@ class TaskListServiceTests {
 	static private Logger logger = LoggerFactory
 			.getLogger(TaskListServiceTests.class);
 	
+	@Autowired
+	private TaskListService realTaskListService;
+	
 	@Mock
 	private TaskListService service;
+	
 	private Long userId = 2L;
 	
 	@BeforeEach
@@ -149,6 +154,17 @@ class TaskListServiceTests {
 		logger.info("After sort in descending order by id: {}", 
 				service.sortTasksByPriority(false));
 		
+	}
+	
+	@Test
+	void generateData() {
+		Integer dataNum = 30;
+		realTaskListService.setUserId(1L);
+		for (Integer i = 0; i < dataNum; i++) {
+			realTaskListService.createTask("Task " + String.valueOf(i), "For testing", 
+					Date.valueOf("2022-07-07"), Date.valueOf("2022-07-10"), 
+					Priority.MEDIUM, TaskStatus.NEW);
+		}
 	}
 	
 	@BeforeEach
