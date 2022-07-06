@@ -1,13 +1,16 @@
 package com.lessayer.service;
 
-
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.lessayer.entity.Priority;
@@ -21,7 +24,7 @@ class TaskListServiceTests {
 	static private Logger logger = LoggerFactory
 			.getLogger(TaskListServiceTests.class);
 	
-	@Autowired
+	@Mock
 	private TaskListService service;
 	private Long userId = 2L;
 	
@@ -36,15 +39,12 @@ class TaskListServiceTests {
 	void retrieveTasksTest() {
 		
 		if(service.retrieveTasks().isPresent()) {
-			
 			logger.info("Tasks with user id {}: {}", userId, 
 					service.retrieveTasks().get());
-			
+			printTaskList(service.retrieveTasks().get());
 		}
 		else {
-			
 			logger.info("No task with user id {}.", userId);
-			
 		}
 		
 	}
@@ -54,19 +54,15 @@ class TaskListServiceTests {
 		
 		Long taskId = service.retrieveTasks().get().get(0).getTaskId();
 		if(service.retrieveTaskById(taskId).isPresent()) {
-			
 			logger.info("Task id {}: {}", taskId, 
 					service.retrieveTaskById(taskId).get());
-			
 		}
 		else {
-			
 			logger.info("No task with task id {}.", taskId);
-			
 		}
 		
 	}
-	
+
 	@Test
 	void createUpdateAndDeleteTaskTest() {
 		
@@ -152,6 +148,26 @@ class TaskListServiceTests {
 				service.sortTasksByPriority(true));
 		logger.info("After sort in descending order by id: {}", 
 				service.sortTasksByPriority(false));
+		
+	}
+	
+	@BeforeEach
+	void generateMockData() {
+		
+		List<Task> taskList = new ArrayList<>();
+		Integer dataNum = 30;
+		for (Integer i = 0; i < dataNum; i++) {
+			taskList.add(new Task(i, 0, "Task " + String.valueOf(i), "For testing", 
+					Date.valueOf("2022-07-07"), Date.valueOf("2022-07-10"), 
+					Priority.MEDIUM, TaskStatus.NEW));
+		}
+		Mockito.when(service.retrieveTasks()).thenReturn(Optional.ofNullable(taskList));
+		
+	}
+	
+	private void printTaskList(List<Task> taskList) {
+		
+		taskList.forEach(Task::toString);
 		
 	}
 	
