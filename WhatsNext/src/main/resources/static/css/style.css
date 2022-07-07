@@ -80,7 +80,13 @@
   vertical-align: middle;
 }
 
+.sort {
+  color: black;
+  text-decoration: none;
+}
+
 .sort:hover {
+  color: gray;
   cursor: pointer;
 }
 

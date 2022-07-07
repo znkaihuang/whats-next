@@ -2,6 +2,7 @@ package com.lessayer.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,13 @@ public class UserService {
 	
 	public Optional<List<User>> retrieveAllUsers() {
 		return repository.findAllUsers();
+	}
+	
+	public Optional<List<User>> retrieveAllUsers(Boolean ascendingOrder) {
+		List<User> userList = repository.findAllUsers().get();
+		sortUsersByRole(userList, ascendingOrder);
+		
+		return Optional.ofNullable(userList);
 	}
 	
 	public List<User> retrieveAllAdmins() {
@@ -89,21 +97,13 @@ public class UserService {
 		
 	}
 	
-//	public List<User> sortUsersByRole(Boolean ascendingOrder) {
-//		
-//		Integer factor = (ascendingOrder) ? 1 : -1;
-//		Comparator<Task> comparator = (Task task1, Task task2) -> 
-//			Long.compare(task1.getTaskId(), task2.getTaskId()) * factor;
-//			
-//		return sortUsers(comparator);
-//	}
+	public void sortUsersByRole(List<User> userList, Boolean ascendingOrder) {
+		
+		Integer factor = (ascendingOrder) ? 1 : -1;
+		Comparator<User> comparator = (User user1, User user2) -> 
+			Long.compare(user1.getRole().ordinal(), user2.getRole().ordinal()) * factor;
+		userList.sort(comparator);
 
-//	private List<User> sortUsers(Comparator<Task> comparator) {
-//		
-//		List<User> userList = repository.
-//		taskList.sort(comparator);
-//		
-//		return taskList;
-//	}
+	}
 	
 }

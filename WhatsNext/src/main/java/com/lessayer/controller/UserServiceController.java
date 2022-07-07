@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.entity.User;
@@ -24,10 +25,20 @@ public class UserServiceController {
 	MailService mailService;
 	
 	@GetMapping("/user-list")
-	public String showUserList(ModelMap model) {
+	public String showUserList(ModelMap model,
+		@RequestParam(required = false) Boolean ascending) {
+
+		List<User> userList;
+		if (ascending == null) {
+			userList = populateAllUsers();
+		}
+		else {
+			userList = populateAllUsers(ascending);
+		}
 		
-		model.put("users", populateAllUsers());
+		model.put("users", userList);
 		model.put("currentPage", "user-list");
+		model.put("ascending", ascending);
 		
 		return "userlist";
 		
@@ -48,4 +59,12 @@ public class UserServiceController {
 		
 	}
 	
+	// Ascend : ascendingOrder = true
+	// Descend : ascendingOrder = false
+	public List<User> populateAllUsers(Boolean ascendingOrder) {
+		
+		Optional<List<User>> userListOptional = userService.retrieveAllUsers(ascendingOrder);
+		return userListOptional.get();
+		
+	}
 }
