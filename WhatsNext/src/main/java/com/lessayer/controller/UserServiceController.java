@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -25,19 +26,27 @@ public class UserServiceController {
 	MailService mailService;
 	
 	@GetMapping("/user-list")
+	public String showUserList(ModelMap model) {
+		return "redirect:/user-list/1";
+	}
+	
+	@GetMapping("/user-list/{pageNum}")
 	public String showUserList(ModelMap model,
+		@PathVariable(name = "pageNum") Integer pageNum,
 		@RequestParam(required = false) Boolean ascending) {
 
 		List<User> userList;
 		if (ascending == null) {
-			userList = populateAllUsers();
+			userList = populateAllUsers(pageNum);
 		}
 		else {
-			userList = populateAllUsers(ascending);
+			userList = populateAllUsers(pageNum, ascending);
 		}
 		
 		model.put("users", userList);
 		model.put("currentPage", "user-list");
+		model.put("pageNum", pageNum);
+		model.put("totalPage", userService.getTotalPage());
 		model.put("ascending", ascending);
 		
 		return "userlist";
@@ -52,18 +61,16 @@ public class UserServiceController {
 		
 	}
 	
-	public List<User> populateAllUsers() {
+	public List<User> populateAllUsers(Integer pageNum) {
 		
-		Optional<List<User>> userListOptional = userService.retrieveAllUsers();
+		Optional<List<User>> userListOptional = userService.retrieveAllUsersByPage(pageNum);
 		return userListOptional.get();
 		
 	}
 	
-	// Ascend : ascendingOrder = true
-	// Descend : ascendingOrder = false
-	public List<User> populateAllUsers(Boolean ascendingOrder) {
+	public List<User> populateAllUsers(Integer pageNum, Boolean ascendingOrder) {
 		
-		Optional<List<User>> userListOptional = userService.retrieveAllUsers(ascendingOrder);
+		Optional<List<User>> userListOptional = userService.retrieveAllUsersByPage(pageNum, ascendingOrder);
 		return userListOptional.get();
 		
 	}

@@ -13,7 +13,7 @@
 					<th scope="col" style="width: 10%">Last login date</th>
 					<th scope="col" style="width: 6%"><a class="sort"
 						th:classappend="${ascending} ? 'ascend' : (${ascending == false} ? 'descend' : '')"
-						th:href="@{/user-list} + (${ascending} ? '?ascending=false' : (${ascending == false} ? '' : '?ascending=true'))">Role</a></th>
+						th:href="@{/user-list/} + ${pageNum} + (${ascending} ? '?ascending=false' : (${ascending == false} ? '' : '?ascending=true'))">Role</a></th>
 					<th scope="col"></th>
 				</tr>
 			</thead>
@@ -31,10 +31,26 @@
 				</tr>
 			</tbody>
 		</table>
+		<div class="d-flex justify-content-center mx-auto page-nav-bar my-4"
+			th:if="${totalPage > 1}">
+			<a
+				th:href="@{/user-list/1} + (${ascending} ? '?ascending=true' : (${ascending == false} ? '?ascending=false' : ''))">&laquo;</a>
+			<th:block th:each="number : ${#numbers.sequence(1, totalPage)}">
+				<a
+					th:href="@{/user-list/} + ${number} + (${ascending} ? '?ascending=true' : (${ascending == false} ? '?ascending=false' : ''))"
+					th:classappend="${number == pageNum} ? 'active' : ''"
+					hidden="hidden">[[${number}]]</a>
+			</th:block>
+			<a
+				th:href="@{/user-list/} + ${totalPage} + (${ascending} ? '?ascending=true' : (${ascending == false} ? '?ascending=false' : ''))">&raquo;</a>
+		</div>
 	</div>
 	<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
 	<script th:src="@{/js/common.js}"></script>
 	<script>
+		var pageNum = parseInt('[[${pageNum}]]');
+		var totalPage = parseInt('[[${totalPage}]]');
+		enablePagination(pageNum, totalPage);
 		toggleSortIcon();
 	</script>
 </body>
