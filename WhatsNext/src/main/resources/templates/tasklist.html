@@ -8,11 +8,11 @@
 			<thead>
 				<tr>
 					<th style="width: 15%;" scope="col">Title</th>
-					<th style="width: 45%;" scope="col">Description</th>
-					<th scope="col">Start Date</th>
-					<th scope="col">End Date</th>
-					<th scope="col">Priority</th>
-					<th scope="col">Status</th>
+					<th style="width: 40%;" scope="col">Description</th>
+					<th style="width: 10%;" class="sort" scope="col">Start Date</th>
+					<th style="width: 10%;" class="sort" scope="col">End Date</th>
+					<th style="width: 8%;" class="sort" scope="col">Priority</th>
+					<th style="width: 8%;" class="sort" scope="col">Status</th>
 					<th scope="col"></th>
 					<th scope="col"></th>
 				</tr>
@@ -55,6 +55,7 @@
 		var pageNum = parseInt('[[${pageNum}]]');
 		var totalPage = parseInt('[[${totalPage}]]');
 		enablePagination(pageNum, totalPage);
+		toggleSortIcon();
 	</script>
 </body>
 </html>
