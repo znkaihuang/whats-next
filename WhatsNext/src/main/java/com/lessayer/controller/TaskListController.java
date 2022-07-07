@@ -72,7 +72,6 @@ public class TaskListController {
 			@RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam String priority, @RequestParam String status) {
 		
-		System.out.println(description);
 		if (!taskId.isEmpty()) {
 			taskService.updateTask(Long.valueOf(taskId), title, description,
 				Date.valueOf(startDate), Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
