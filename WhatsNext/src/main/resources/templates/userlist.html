@@ -7,9 +7,8 @@
 		<table class="table my-4">
 			<thead>
 				<tr>
-					<th scope="col" style="width: 5%">ID</th>
-					<th scope="col" style="width: 10%">Name</th>
-					<th scope="col" style="width: 30%">Email</th>
+					<th scope="col" style="width: 11%">Name</th>
+					<th scope="col" style="width: 34%">Email</th>
 					<th scope="col" style="width: 10%">Register date</th>
 					<th scope="col" style="width: 10%">Last login date</th>
 					<th scope="col" style="width: 6%"><a class="sort"
@@ -20,7 +19,6 @@
 			</thead>
 			<tbody>
 				<tr th:each="user, status: ${users}">
-					<th scope="row" th:text="${status.index}+1" />
 					<td th:text="${user.userName}"></td>
 					<td th:text="${user.email}"></td>
 					<td th:text="${user.registerDate}"></td>
