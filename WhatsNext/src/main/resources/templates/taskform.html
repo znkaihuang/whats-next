@@ -6,8 +6,10 @@
 	<div th:insert="fragments :: navbar"></div>
 	<div class="container">
 		<form class="my-4 form" th:action="@{/add-task}" method="post">
-			<input type="hidden" name="taskId" th:value="${updateTask} ? ${updateTask.taskId} : null">
-			<input type="hidden" name="userId" th:value="${updateTask} ? ${updateTask.userId} : null">
+			<input type="hidden" name="taskId"
+				th:value="${updateTask} ? ${updateTask.taskId} : null"> <input
+				type="hidden" name="userId"
+				th:value="${updateTask} ? ${updateTask.userId} : null">
 			<div class="row justify-content-center">
 				<div class="col-12 mb-3">
 					<label class="form-label">Title</label> <input type="text"
@@ -46,13 +48,15 @@
 						<option value="HIGH">HIGH</option>
 						<option value="MEDIUM">MEDIUM</option>
 						<option value="LOW">LOW</option>
-					</select>
-					<select
-						class="form-select" name="priority" th:if="${updateTask}">
-						<option value="CRITICAL" th:selected="${updateTask.priorityString == 'CRITICAL'}">CRITICAL</option>
-						<option value="HIGH" th:selected="${updateTask.priorityString == 'HIGH'}">HIGH</option>
-						<option value="MEDIUM" th:selected="${updateTask.priorityString == 'MEDIUM'}">MEDIUM</option>
-						<option value="LOW" th:selected="${updateTask.priorityString == 'LOW'}">LOW</option>
+					</select> <select class="form-select" name="priority" th:if="${updateTask}">
+						<option value="CRITICAL"
+							th:selected="${updateTask.priorityString == 'CRITICAL'}">CRITICAL</option>
+						<option value="HIGH"
+							th:selected="${updateTask.priorityString == 'HIGH'}">HIGH</option>
+						<option value="MEDIUM"
+							th:selected="${updateTask.priorityString == 'MEDIUM'}">MEDIUM</option>
+						<option value="LOW"
+							th:selected="${updateTask.priorityString == 'LOW'}">LOW</option>
 					</select>
 					<div class="form-text">Choose a priority for the task.</div>
 				</div>
@@ -66,22 +70,23 @@
 							th:hidden="${updateTask} ? 'false' : 'true'">PENDING</option>
 						<option value="FINISHED"
 							th:hidden="${updateTask} ? 'false' : 'true'">FINISHED</option>
-					</select>
-					<select
-						class="form-select" name="status" th:if="${updateTask}">
-						<option value="NEW" th:selected="${updateTask.statusString == 'NEW'}">NEW</option>
+					</select> <select class="form-select" name="status" th:if="${updateTask}">
+						<option value="NEW"
+							th:selected="${updateTask.statusString == 'NEW'}">NEW</option>
 						<option value="ON_GOING"
-							 th:selected="${updateTask.statusString == 'ON GOING'}">ON GOING</option>
+							th:selected="${updateTask.statusString == 'ON GOING'}">ON
+							GOING</option>
 						<option value="PENDING"
-							 th:selected="${updateTask.statusString == 'PENDING'}">PENDING</option>
+							th:selected="${updateTask.statusString == 'PENDING'}">PENDING</option>
 						<option value="FINISHED"
-							 th:selected="${updateTask.statusString == 'FINISHED'}">FINISHED</option>
+							th:selected="${updateTask.statusString == 'FINISHED'}">FINISHED</option>
 					</select>
 					<div class="form-text">Choose a status for the task.</div>
 				</div>
 				<div class="col-4 my-3 d-grid mx-auto">
 					<button type="submit" class="btn btn-primary">Submit</button>
-					<a class=" d-grid my-3" th:href="@{/task-list/} + ${pageNum != null ? pageNum : ''}"
+					<a class=" d-grid my-3"
+						th:href="@{/task-list/} + ${pageNum != null ? pageNum : ''}"
 						style="text-decoration: none;"><button type="button"
 							class="btn btn-danger">Cancel</button></a>
 				</div>
