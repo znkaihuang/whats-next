@@ -26,7 +26,7 @@ public class WelcomeController {
 		SecurityContext context = SecurityContextHolder.getContext();
 		Authentication authentication = context.getAuthentication();
 		String userName = authentication.getName();
-		Boolean isAdmin = (userService.retrieveUser(userName).get().getRole() == Role.ADMIN)
+		Boolean isAdmin = (userService.retrieveUserByName(userName).get().getRole() == Role.ADMIN)
 							? true : false;
 		model.put("userName", userName);
 		model.put("isAdmin", isAdmin);
