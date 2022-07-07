@@ -19,6 +19,10 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
+	public final Integer USER_PER_PAGE = 8;
+	private Integer totalPage;
+	private Integer totalUserNum;
+	
 	public Optional<List<User>> retrieveAllUsers() {
 		return repository.findAllUsers();
 	}
@@ -28,6 +32,49 @@ public class UserService {
 		sortUsersByRole(userList, ascendingOrder);
 		
 		return Optional.ofNullable(userList);
+	}
+	
+	public Optional<List<User>> retrieveAllUsersByPage(Integer pageNum) {
+		
+		Optional<List<User>> userListOptional = retrieveAllUsers();
+		calculateTotalPageAndUsers(userListOptional);
+		return retrieveAllUsersByPage(userListOptional, pageNum);
+	}
+
+	public Optional<List<User>> retrieveAllUsersByPage(Integer pageNum, Boolean ascendingOrder) {
+		
+		Optional<List<User>> userListOptional = retrieveAllUsers(ascendingOrder);
+		calculateTotalPageAndUsers(userListOptional);
+		return retrieveAllUsersByPage(userListOptional, pageNum);
+	}
+	
+	private Optional<List<User>> retrieveAllUsersByPage(Optional<List<User>> userListOptional, Integer pageNum) {
+		if (userListOptional.isEmpty()) {
+			return userListOptional;
+		}
+		else {
+			return Optional.ofNullable(userListOptional.get().subList((pageNum - 1) * USER_PER_PAGE, 
+					Math.min(userListOptional.get().size(), pageNum * USER_PER_PAGE)));
+		}
+	}
+	
+	private void calculateTotalPageAndUsers(Optional<List<User>> userListOptional) {
+		
+		if (userListOptional.isEmpty()) {
+			totalPage = totalUserNum = 0;
+		}
+		else {
+			totalUserNum = userListOptional.get().size();
+			if (totalUserNum == 0) {
+				totalPage = 0;
+			}
+			else if (totalUserNum % USER_PER_PAGE == 0) {
+				totalPage = totalUserNum / USER_PER_PAGE;
+			}
+			else {
+				totalPage = (totalUserNum / USER_PER_PAGE) + 1;
+			}
+		}
 	}
 	
 	public List<User> retrieveAllAdmins() {
@@ -104,6 +151,14 @@ public class UserService {
 			Long.compare(user1.getRole().ordinal(), user2.getRole().ordinal()) * factor;
 		userList.sort(comparator);
 
+	}
+	
+	public Integer getTotalPage() {
+		return totalPage;
+	}
+	
+	public Integer getTotalUserNum() {
+		return totalUserNum;
 	}
 	
 }
