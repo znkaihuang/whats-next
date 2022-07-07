@@ -179,4 +179,12 @@ public class TaskListService {
 		
 	}
 	
+	public List<Task> sortTasksByStatus(Boolean ascendingOrder) {
+		
+		Integer factor = (ascendingOrder) ? 1 : -1;
+		Comparator<Task> comparator = (Task task1, Task task2) -> 
+			task1.getStatus().compareTo(task2.getStatus()) * factor;
+		return sortTasks(comparator);
+		
+	}
 }
