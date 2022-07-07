@@ -23,6 +23,15 @@ public class UserRepository {
 	
 	private TypedQuery<User> query;
 	
+	// PSQL Name = "find_all_users",
+	// PSQL Query = "select u from User"
+	public Optional<List<User>> findAllUsers() {
+		
+		query = entityManager.createNamedQuery("find_all_users", User.class);
+		
+		return Optional.ofNullable(query.getResultList());
+	}
+	
 	public User findByUserId(Long userId) {
 		
 		return entityManager.find(User.class, userId);

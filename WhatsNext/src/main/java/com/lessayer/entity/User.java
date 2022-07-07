@@ -11,6 +11,10 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQuery(
+		name = "find_all_users",
+		query = "select u from User u"
+)
+@NamedQuery(
 		name = "find_user_by_username",
 		query = "select u from User u where u.userName like :username"
 )
