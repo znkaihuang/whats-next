@@ -18,27 +18,27 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
-	public Optional<User> retrieveUser(String userName) {
+	public Optional<List<User>> retrieveAllUsers() {
+		return repository.findAllUsers();
+	}
+	
+	public List<User> retrieveAllAdmins() {
+		return repository.findByRole(Role.ADMIN);
+	}
+	
+	public List<User> retrieveAllNormalUsers() {
+		return repository.findByRole(Role.USER);
+	}
+	
+	public Optional<User> retrieveUserByName(String userName) {
 		
 		return repository.findByUserName(userName);
 		
 	}
 	
-	public List<User> retrieveAllAdmins() {
-		
-		return repository.findByRole(Role.ADMIN);
-		
-	}
-	
-	public List<User> retrieveAllUsers() {
-		
-		return repository.findByRole(Role.USER);
-		
-	}
-	
 	public boolean isUserExist(String userName) {
 		
-		return (retrieveUser(userName).isPresent()) ? true : false;
+		return (retrieveUserByName(userName).isPresent()) ? true : false;
 		
 	}
 	
@@ -88,5 +88,22 @@ public class UserService {
 		repository.updateUser(user);
 		
 	}
+	
+//	public List<User> sortUsersByRole(Boolean ascendingOrder) {
+//		
+//		Integer factor = (ascendingOrder) ? 1 : -1;
+//		Comparator<Task> comparator = (Task task1, Task task2) -> 
+//			Long.compare(task1.getTaskId(), task2.getTaskId()) * factor;
+//			
+//		return sortUsers(comparator);
+//	}
+
+//	private List<User> sortUsers(Comparator<Task> comparator) {
+//		
+//		List<User> userList = repository.
+//		taskList.sort(comparator);
+//		
+//		return taskList;
+//	}
 	
 }

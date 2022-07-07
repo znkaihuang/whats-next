@@ -28,7 +28,7 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 		this.service = service;
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		List<com.lessayer.entity.User> adminList = service.retrieveAllAdmins();
-		List<com.lessayer.entity.User> userList = service.retrieveAllUsers();
+		List<com.lessayer.entity.User> userList = service.retrieveAllNormalUsers();
 		
 		for(com.lessayer.entity.User admin : adminList) {
 			
