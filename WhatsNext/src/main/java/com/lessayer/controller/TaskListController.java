@@ -124,7 +124,7 @@ public class TaskListController {
 	
 	public List<Task> populateTasks(Principal principal, Integer pageNum) {
 		
-		Long userId = userService.retrieveUser(principal.getName()).get().getUserId();
+		Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
 		taskService.setUserId(userId);
 		
 		return taskService.retrieveTasksByPage(pageNum).get();
