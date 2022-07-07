@@ -80,6 +80,21 @@
   vertical-align: middle;
 }
 
+.sort:after {
+  content: '\02796';
+  padding-left: 5px;
+}
+
+.sort.ascend:after {
+  content: '\025B2';
+  padding-left: 5px;	
+}
+
+.sort.descend:after {
+  content: '\025BC';
+  padding-left: 5px;	
+}
+
 .form,
 .form .form-control {
   font-size: 18px;

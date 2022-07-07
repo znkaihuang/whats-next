@@ -27,3 +27,36 @@ function enablePagination(pageNum, totalPage) {
 		}
 	}
 }
+
+function toggleSortIcon() {
+	var sort = document.getElementsByClassName('sort');
+	var i;
+
+	for (i = 0; i < sort.length; i++) {
+		sort[i].addEventListener('click', function() {
+			var sort = document.getElementsByClassName('sort');
+			var i;
+			for (i = 0; i < sort.length; i++) {
+				if (sort[i] != this) {
+					if (sort[i].classList.contains('ascend')) {
+						sort[i].classList.remove('ascend');
+					}
+					if (sort[i].classList.contains('descend')) {
+						sort[i].classList.remove('descend');
+					}
+				}
+			}
+			var classList = this.classList;
+			if (classList.contains('ascend')) {
+				this.classList.remove('ascend');
+				this.classList.add('descend');
+			}
+			else if (classList.contains('descend')) {
+				this.classList.remove('descend');
+			}
+			else {
+				this.classList.add('ascend');
+			}
+		});
+	}
+}
