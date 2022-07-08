@@ -8,10 +8,9 @@
 				<div class="col-12 mt-4">
 					<h4 style="font-weight: bold;">Welcome back, [[${userName}]]!</h5>
 				</div>
-				<div th:replace="fragments :: collapsible-tasks ('Recent tasks')"></div>
-				<div th:replace="fragments :: collapsible-tasks ('Critical tasks')"></div>
-				<div th:replace="fragments :: collapsible-tasks ('On-going tasks')"></div>
-				<div th:replace="fragments :: collapsible-tasks ('Pending tasks')"></div>
+				<th:block th:each="taskDiv : ${taskDivs}">
+					<div th:replace="fragments :: collapsible-tasks (${taskDiv.name}, ${taskDiv.style})"></div>
+				</th:block>
 	 		</div>
 	 	</div>
 	 	

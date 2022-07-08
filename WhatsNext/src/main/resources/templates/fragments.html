@@ -32,10 +32,9 @@
 		</nav>
 	</div>
 	<hr class="m-0">
-	<div th:fragment="collapsible-tasks (type)">
+	<div th:fragment="collapsible-tasks (type, divStyle)">
 		<div class="col-12 row my-4"
-			th:classappend="${type == 'Recent tasks' ? 'recent-task-div' : type == 'Critical tasks' ? 'critical-task-div'
-				 : type == 'On-going tasks' ? 'on-going-task-div' : 'pending-task-div'}">
+			th:classappend="${divStyle}">
 			<button type="button" class="collapsible">[[${type}]]</button>
 			<div class="content col-12">
 				<ul>
