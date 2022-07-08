@@ -7,12 +7,24 @@
 		<table class="table my-4" th:if="${tasks.size gt 0}">
 			<thead>
 				<tr>
-					<th style="width: 15%;" scope="col">Title</th>
+					<th style="width: 15%;" scope="col"><a class="sort"
+						th:classappend="${sortField == 'title'} ? (${ascending} ? 'ascend' : 'descend') : ''"
+						th:href="@{/task-list/} + ${pageNum} + (${sortField != 'title'} ? '?sortField=title&ascending=true' : (${ascending} ? '?sortField=title&ascending=false' : ''))">Title</a></th>
 					<th style="width: 40%;" scope="col">Description</th>
-					<th style="width: 10%;" class="sort" scope="col">Start Date</th>
-					<th style="width: 10%;" class="sort" scope="col">End Date</th>
-					<th style="width: 8%;" class="sort" scope="col">Priority</th>
-					<th style="width: 8%;" class="sort" scope="col">Status</th>
+					<th style="width: 10%;" scope="col"><a class="sort"
+						th:classappend="${sortField == 'startDate'} ? (${ascending} ? 'ascend' : 'descend') : ''"
+						th:href="@{/task-list/} + ${pageNum} + (${sortField != 'startDate'} ? '?sortField=startDate&ascending=true' : (${ascending} ? '?sortField=startDate&ascending=false' : ''))">Start
+							Date</a></th>
+					<th style="width: 10%;" scope="col"><a class="sort"
+						th:classappend="${sortField == 'endDate'} ? (${ascending} ? 'ascend' : 'descend') : ''"
+						th:href="@{/task-list/} + ${pageNum} + (${sortField != 'endDate'} ? '?sortField=endDate&ascending=true' : (${ascending} ? '?sortField=endDate&ascending=false' : ''))">End
+							Date</a></th>
+					<th style="width: 8%;" scope="col"><a class="sort"
+						th:classappend="${sortField == 'priority'} ? (${ascending} ? 'ascend' : 'descend') : ''"
+						th:href="@{/task-list/} + ${pageNum} + (${sortField != 'priority'} ? '?sortField=priority&ascending=true' : (${ascending} ? '?sortField=priority&ascending=false' : ''))">Priority</a></th>
+					<th style="width: 8%;" scope="col"><a class="sort"
+						th:classappend="${sortField == 'status'} ? (${ascending} ? 'ascend' : 'descend') : ''"
+						th:href="@{/task-list/} + ${pageNum} + (${sortField != 'status'} ? '?sortField=status&ascending=true' : (${ascending} ? '?sortField=status&ascending=false' : ''))">Status</a></th>
 					<th scope="col"></th>
 					<th scope="col"></th>
 				</tr>
@@ -39,7 +51,8 @@
 			th:if="${totalPage > 1}">
 			<a th:href="@{/task-list/1}">&laquo;</a>
 			<th:block th:each="number : ${#numbers.sequence(1, totalPage)}">
-				<a th:href="@{/task-list/} + ${number}"
+				<a
+					th:href="@{/task-list/} + ${number} + (${sortField} ? '?sortField=' + ${sortField} + '&ascending=' + ${ascending} : '')"
 					th:classappend="${number == pageNum} ? 'active' : ''"
 					hidden="hidden">[[${number}]]</a>
 			</th:block>
