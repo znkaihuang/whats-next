@@ -25,7 +25,7 @@ class UserServiceTests {
 	void testRetrieveUser() {
 		
 		String userName = "Guest";
-		Optional<User> user = service.retrieveUser(userName);
+		Optional<User> user = service.retrieveUserByName(userName);
 		if(user.isEmpty()) {
 			
 			logger.info("No such user {}", userName);
@@ -106,10 +106,10 @@ class UserServiceTests {
 		
 		String userName = "Mien";
 		String password = "mien@1116";
-		logger.info("Before update password {}", service.retrieveUser(userName)
+		logger.info("Before update password {}", service.retrieveUserByName(userName)
 				.get().getPassword());
 		service.updatePassword(userName, password);
-		logger.info("After update password {}", service.retrieveUser(userName)
+		logger.info("After update password {}", service.retrieveUserByName(userName)
 				.get().getPassword());
 		
 	}
@@ -118,10 +118,10 @@ class UserServiceTests {
 	void testUpdateLastLoginDate() {
 		
 		String userName = "Mien";
-		logger.info("Before update last login date {}", service.retrieveUser(userName)
+		logger.info("Before update last login date {}", service.retrieveUserByName(userName)
 				.get().getLastLoginDate());
 		service.updateLastLoginDate(userName, Date.valueOf("2022-04-11"));
-		logger.info("After update last login date {}", service.retrieveUser(userName)
+		logger.info("After update last login date {}", service.retrieveUserByName(userName)
 				.get().getLastLoginDate());
 		
 	}
@@ -130,10 +130,10 @@ class UserServiceTests {
 	void testUpdateEmail() {
 		
 		String userName = "Tam";
-		logger.info("Before update email {}", service.retrieveUser(userName)
+		logger.info("Before update email {}", service.retrieveUserByName(userName)
 				.get().getEmail());
 		service.updateEmail(userName, "guest@test.com");
-		logger.info("After update last login date {}", service.retrieveUser(userName)
+		logger.info("After update last login date {}", service.retrieveUserByName(userName)
 				.get().getEmail());
 		
 	}

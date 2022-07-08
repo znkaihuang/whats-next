@@ -106,53 +106,78 @@ class TaskListServiceTests {
 	@Test
 	void sortTasksByIdTest() {
 		
+		List<Task> taskList = service.retrieveTasks().get();
 		logger.info("Before sort by id: {}", service.retrieveTasks());
-		logger.info("After sort in ascending order by id: {}", service.sortTasksById(true));
-		logger.info("After sort in descending order by id: {}", service.sortTasksById(false));
+		
+		service.sortTasksById(taskList,true);
+		logger.info("After sort in ascending order by id: {}", taskList);
+		
+		service.sortTasksById(taskList,false);
+		logger.info("After sort in descending order by id: {}", taskList);
 		
 	}
 	
 	@Test
 	void sortTasksByTitleTest() {
 		
+		List<Task> taskList = service.retrieveTasks().get();
 		logger.info("Before sort by id: {}", service.retrieveTasks());
+		
+		service.sortTasksByTitle(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
-				service.sortTasksByTitle(true));
+				taskList);
+		
+		service.sortTasksByTitle(taskList,false);
 		logger.info("After sort in descending order by id: {}", 
-				service.sortTasksByTitle(false));
+				taskList);
 		
 	}
 	
 	@Test
 	void sortTasksByStartDateTest() {
 		
+		List<Task> taskList = service.retrieveTasks().get();
 		logger.info("Before sort by id: {}", service.retrieveTasks());
+		
+		service.sortTasksByStartDate(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
-				service.sortTasksByStartDate(true));
+				taskList);
+		
+		service.sortTasksByStartDate(taskList,false);
 		logger.info("After sort in descending order by id: {}", 
-				service.sortTasksByStartDate(false));
+				taskList);
 	
 	}
 	
 	@Test
 	void sortTasksByEndDateTest() {
 		
+		List<Task> taskList = service.retrieveTasks().get();
 		logger.info("Before sort by id: {}", service.retrieveTasks());
+		
+		service.sortTasksByEndDate(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
-				service.sortTasksByEndDate(true));
+				taskList);
+		
+		service.sortTasksByEndDate(taskList,false);
 		logger.info("After sort in descending order by id: {}", 
-				service.sortTasksByEndDate(false));
+				taskList);
 		
 	}
 	
 	@Test
 	void sortTasksByPriorityTest() {
 		
+		List<Task> taskList = service.retrieveTasks().get();
 		logger.info("Before sort by id: {}", service.retrieveTasks());
+		
+		service.sortTasksByPriority(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
-				service.sortTasksByPriority(true));
+				taskList);
+		
+		service.sortTasksByPriority(taskList,false);
 		logger.info("After sort in descending order by id: {}", 
-				service.sortTasksByPriority(false));
+				taskList);
 		
 	}
 	
