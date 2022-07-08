@@ -63,7 +63,45 @@ public class TaskListService {
 			return taskListOptional;
 		}
 		else {
-			return Optional.ofNullable(taskListOptional.get().subList((pageNum - 1) * TASKS_PER_PAGE, 
+			List<Task> taskList = taskListOptional.get();
+			sortTasksById(taskList, updateCache);
+			
+			return Optional.ofNullable(taskList.subList((pageNum - 1) * TASKS_PER_PAGE, 
+					Math.min(taskListOptional.get().size(), pageNum * TASKS_PER_PAGE)));
+		}
+		
+	}
+	
+	public Optional<List<Task>> retrieveTasksByPage(Integer pageNum, String sortField, Boolean ascending) {
+		
+		Optional<List<Task>> taskListOptional = retrieveTasks();
+		if (taskListOptional.isEmpty()) {
+			return taskListOptional;
+		}
+		else {
+			List<Task> taskList = taskListOptional.get();
+			
+			switch (sortField) {
+				case "title":
+					sortTasksByTitle(taskList, ascending);
+					break;
+				case "startDate":
+					sortTasksByStartDate(taskList, ascending);
+					break;
+				case "endDate":
+					sortTasksByEndDate(taskList, ascending);
+					break;
+				case "priority":
+					sortTasksByPriority(taskList, ascending);
+					break;
+				case "status":
+					sortTasksByStatus(taskList, ascending);
+					break;
+				default:
+					break;
+			}
+			
+			return Optional.ofNullable(taskList.subList((pageNum - 1) * TASKS_PER_PAGE, 
 					Math.min(taskListOptional.get().size(), pageNum * TASKS_PER_PAGE)));
 		}
 		
@@ -126,65 +164,57 @@ public class TaskListService {
 		
 	}
 	
-	private List<Task> sortTasks(Comparator<Task> comparator) {
-		
-		List<Task> taskList = repository.findByUserId(userId);
-		taskList.sort(comparator);
-		return taskList;
-		
-	}
-	
-	public List<Task> sortTasksById(Boolean ascendingOrder) {
+	public void sortTasksById(List<Task> taskList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
 		Comparator<Task> comparator = (Task task1, Task task2) -> 
 			Long.compare(task1.getTaskId(), task2.getTaskId()) * factor;
-		return sortTasks(comparator);
+		taskList.sort(comparator);
 		
 	}
 
-	public List<Task> sortTasksByTitle(Boolean ascendingOrder) {
+	public void sortTasksByTitle(List<Task> taskList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
 		Comparator<Task> comparator = (Task task1, Task task2) -> 
 			task1.getTitle().compareTo(task2.getTitle()) * factor;
-		return sortTasks(comparator);
+		taskList.sort(comparator);
 		
 	}
 
-	public List<Task> sortTasksByStartDate(Boolean ascendingOrder) {
+	public void sortTasksByStartDate(List<Task> taskList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
 		Comparator<Task> comparator = (Task task1, Task task2) -> 
 			task1.getStartDate().compareTo(task2.getStartDate()) * factor;
-		return sortTasks(comparator);
+		taskList.sort(comparator);
 		
 	}
 	
-	public List<Task> sortTasksByEndDate(Boolean ascendingOrder) {
+	public void sortTasksByEndDate(List<Task> taskList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
 		Comparator<Task> comparator = (Task task1, Task task2) -> 
 			task1.getEndDate().compareTo(task2.getEndDate()) * factor;
-		return sortTasks(comparator);
+		taskList.sort(comparator);
 		
 	}
 	
-	public List<Task> sortTasksByPriority(Boolean ascendingOrder) {
+	public void sortTasksByPriority(List<Task> taskList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
 		Comparator<Task> comparator = (Task task1, Task task2) -> 
 			task1.getPriority().compareTo(task2.getPriority()) * factor;
-		return sortTasks(comparator);
+		taskList.sort(comparator);
 		
 	}
 	
-	public List<Task> sortTasksByStatus(Boolean ascendingOrder) {
+	public void sortTasksByStatus(List<Task> taskList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
 		Comparator<Task> comparator = (Task task1, Task task2) -> 
 			task1.getStatus().compareTo(task2.getStatus()) * factor;
-		return sortTasks(comparator);
+		taskList.sort(comparator);
 		
 	}
 }
