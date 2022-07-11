@@ -85,6 +85,12 @@ public class UserService {
 		return repository.findByRole(Role.USER);
 	}
 	
+	public Optional<User> retrieveUserById(Long userId) {
+		
+		return Optional.ofNullable(repository.findByUserId(userId));
+		
+	}
+	
 	public Optional<User> retrieveUserByName(String userName) {
 		
 		return repository.findByUserName(userName);
