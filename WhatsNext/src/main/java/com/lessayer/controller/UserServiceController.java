@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -25,6 +27,9 @@ public class UserServiceController {
 	@Autowired
 	MailService mailService;
 	
+	private Integer pageNum;
+	private Boolean ascending;
+	
 	@GetMapping("/user-list")
 	public String showUserList(ModelMap model) {
 		return "redirect:/user-list/1";
@@ -34,7 +39,10 @@ public class UserServiceController {
 	public String showUserList(ModelMap model,
 		@PathVariable(name = "pageNum") Integer pageNum,
 		@RequestParam(required = false) Boolean ascending) {
-
+		
+		this.pageNum = pageNum;
+		this.ascending = ascending;
+		
 		List<User> userList;
 		if (ascending == null) {
 			userList = populateAllUsers(pageNum);
@@ -53,11 +61,29 @@ public class UserServiceController {
 		
 	}
 	
-	@GetMapping("/send-mail")
-	public String sendMail() {
+	@GetMapping("/send-mail/{userId}")
+	public String showSendMailForm(@PathVariable("userId") Long userId, ModelMap model) {
 		
-		// mailService.sendSimpleMessage("test", "test", "test");
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		model.put("senderEmail", userService.retrieveUserByName(userName).get().getEmail());
+		model.put("receiverEmail", userService.retrieveUserById(userId).get().getEmail());
+		model.put("currentPage", "user-list");
+		model.put("pageNum", pageNum);
+		model.put("ascending", ascending);
+		
 		return "mail";
+		
+	}
+	
+	@PostMapping("/send-mail")
+	public String sendMail(@RequestParam(name = "senderEmail") String senderEmail, 
+			@RequestParam(name = "receiverEmail") String receiverEmail, @RequestParam(name = "emailSubject") String emailSubject, 
+			@RequestParam(name = "emailContent") String emailContent, ModelMap model) {
+		
+		mailService.sendSimpleMessage(receiverEmail, emailSubject, emailContent);
+		String redirectURLsuffix = (ascending == null) ? "" : "?ascending=" + ascending.toString();
+		
+		return "redirect:/user-list/" + pageNum.toString() + redirectURLsuffix;
 		
 	}
 	
