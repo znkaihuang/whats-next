@@ -32,15 +32,17 @@
 		</nav>
 	</div>
 	<hr class="m-0">
-	<div th:fragment="collapsible-tasks (type, divStyle)">
-		<div class="col-12 row my-4"
-			th:classappend="${divStyle}">
-			<button type="button" class="collapsible">[[${type}]]</button>
+	<div th:fragment="collapsible-tasks (type, divStyle, taskList)" th:remove="tag">
+		<div class="col-12 row my-4" th:classappend="${divStyle}">
+			<button type="button" class="collapsible collapse-active">[[${type}]]</button>
 			<div class="content col-12">
 				<ul>
-					<li>Task 1</li>
-					<li>Task 2</li>
-					<li>Task 3</li>
+					<th:block th:each="task : ${taskList}">
+						<li>[[${task.title}]] <br> Date: <span class="date">[[${task.startDate}]] ~ [[${task.endDate}]] </span>&nbsp;
+						 Priority: <span class="">[[${task.priority}]] Status:
+							[[${task.statusString}]] &nbsp;
+							<a th:href="@{/update-task} + '?taskId=' + ${task.taskId} + '&from=home'"><button class="btn btn-secondary">More detail</button></a></li>
+					</th:block>
 				</ul>
 			</div>
 		</div>

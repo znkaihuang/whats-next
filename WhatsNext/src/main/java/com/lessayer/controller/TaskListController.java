@@ -79,15 +79,20 @@ public class TaskListController {
 	@PostMapping("/add-task")
 	public String createTask(String taskId, String userId, @RequestParam String title, @RequestParam String description,
 			@RequestParam String startDate, @RequestParam String endDate, @RequestParam String priority,
-			@RequestParam String status) {
+			@RequestParam String status, @RequestParam(required = false) String from) {
 
 		if (!taskId.isEmpty()) {
 			taskService.updateTask(Long.valueOf(taskId), title, description, Date.valueOf(startDate),
 					Date.valueOf(endDate), Priority.valueOf(priority), TaskStatus.valueOf(status));
 
 			String urlSuffix = (sortField != null) ? "?sortField=" + sortField + "&ascending=" + ascending : "";
-
-			return "redirect:/task-list/" + pageNum + urlSuffix;
+			
+			if (from != null) {
+				return "redirect:/?update=true";
+			}
+			else {
+				return "redirect:/task-list/" + pageNum + urlSuffix;
+			}
 		} else {
 			taskService.createTask(title, description, Date.valueOf(startDate), Date.valueOf(endDate),
 					Priority.valueOf(priority), TaskStatus.valueOf(status));
@@ -123,7 +128,7 @@ public class TaskListController {
 	}
 
 	@GetMapping("/update-task")
-	public String showUpdateTask(@RequestParam Long taskId, ModelMap model) {
+	public String showUpdateTask(@RequestParam Long taskId, @RequestParam(required = false) String from, ModelMap model) {
 
 		Task task = taskService.retrieveTaskById(taskId).get();
 
@@ -133,6 +138,7 @@ public class TaskListController {
 		model.put("pageNum", pageNum);
 		model.put("sortField", sortField);
 		model.put("ascending", ascending);
+		model.put("from", from);
 
 		return "taskform";
 

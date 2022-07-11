@@ -35,7 +35,7 @@
 .collapsible {
 	background-color: white;
 	cursor: pointer;
-	width: 50%;
+	width: 75%;
 	border: none;
 	text-align: left;
 	outline: none;
@@ -58,9 +58,18 @@
 .content {
 	padding: 0 18px;
 	background-color: white;
-	max-height: 0;
+	max-height: 1500px;
 	overflow: hidden;
-	transition: max-height 0.2s ease-out;
+	transition: max-height 0.5s ease-out;
+}
+
+.content ul li {
+	margin: 12px 0px;
+	font-size: 20px;
+}
+
+.date {
+	font-style: italic;
 }
 
 .page-nav-bar a {

@@ -8,8 +8,8 @@
 				<div class="col-12 mt-4">
 					<h4 style="font-weight: bold;">Welcome back, [[${userName}]]!</h5>
 				</div>
-				<th:block th:each="taskDiv : ${taskDivs}">
-					<div th:replace="fragments :: collapsible-tasks (${taskDiv.name}, ${taskDiv.style})"></div>
+				<th:block th:each="taskDiv, iterStat : ${taskDivs}">
+					<div th:replace="fragments :: collapsible-tasks (${taskDiv.name}, ${taskDiv.style}, ${taskDiv.taskList})"></div>
 				</th:block>
 	 		</div>
 	 	</div>

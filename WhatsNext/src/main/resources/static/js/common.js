@@ -10,8 +10,8 @@ function enableCollapsibleDiv() {
 		coll[i].addEventListener('click', function() {
 			this.classList.toggle('collapse-active');
 			var content = this.nextElementSibling;
-			if (content.style.maxHeight) {
-				content.style.maxHeight = null;
+			if (content.style.maxHeight != '0px') {
+				content.style.maxHeight = '0px';
 			} else {
 				content.style.maxHeight = content.scrollHeight + 'px';
 			}

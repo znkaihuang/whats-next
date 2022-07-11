@@ -84,11 +84,21 @@
 					<div class="form-text">Choose a status for the task.</div>
 				</div>
 				<div class="col-4 my-3 d-grid mx-auto">
-					<button type="submit" class="btn btn-primary">Submit</button>
-					<a class=" d-grid my-3"
-						th:href="@{/task-list/} + ${pageNum != null ? pageNum : ''} + ${sortField != null ? '?sortField=' + sortField + '&ascending=' + ascending : ''}"
-						style="text-decoration: none;"><button type="button"
-							class="btn btn-danger">Cancel</button></a>
+					<th:block th:unless="${from}">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<a class=" d-grid my-3"
+							th:href="@{/task-list/} + ${pageNum != null ? pageNum : ''} + ${sortField != null ? '?sortField=' + sortField + '&ascending=' + ascending : ''}"
+							style="text-decoration: none;"><button type="button"
+								class="btn btn-danger">Cancel</button></a>
+					</th:block>
+					<th:block th:if="${from}">
+						<input type="hidden" name="from" th:value="home">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<a class=" d-grid my-3"
+							th:href="@{/}"
+							style="text-decoration: none;"><button type="button"
+								class="btn btn-danger">Cancel</button></a>
+					</th:block>
 				</div>
 			</div>
 		</form>
