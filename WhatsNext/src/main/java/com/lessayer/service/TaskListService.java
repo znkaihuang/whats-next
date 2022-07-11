@@ -1,6 +1,7 @@
 package com.lessayer.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -126,6 +127,20 @@ public class TaskListService {
 
 	}
 
+	public Optional<List<Task>> retrieveTasksByPriority(Priority priority) {
+		return Optional.ofNullable(repository.findByUserPriority(priority));
+	}
+	
+	public Optional<List<Task>> retrieveTasksByPriorities(Priority[] priorities) {
+		List<Task> returnTaskList = new ArrayList<>();
+		
+		for (Priority priority : priorities) {
+			returnTaskList.addAll(retrieveTasksByPriority(priority).get());
+		}
+		
+		return Optional.ofNullable(returnTaskList);
+	}
+	
 	public Long createTask(String title, String description, Date startDate, Date endDate, Priority priority,
 			TaskStatus status) {
 
@@ -210,4 +225,39 @@ public class TaskListService {
 		taskList.sort(comparator);
 
 	}
+
+	public List<Task> filterTaskListWithActiveStatus(List<Task> taskList) {
+		return taskList.stream()
+				.filter(task -> (task.getStatus() == TaskStatus.NEW || task.getStatus() == TaskStatus.ON_GOING))
+				.toList();
+	}
+	
+	public List<Task> filterTaskListBeforEndDate(List<Task> taskList, Date date, Boolean equalInclude) {
+		
+		if (equalInclude) {
+			return taskList.stream()
+					.filter(task -> task.getEndDate().before(date) && task.getEndDate() == date)
+					.toList(); 
+		}
+		else {
+			return taskList.stream()
+					.filter(task -> task.getEndDate().before(date))
+					.toList();
+		}
+	}
+	
+	public List<Task> filterTaskListAfterEndDate(List<Task> taskList, Date date, Boolean equalInclude) {
+		
+		if (equalInclude) {
+			return taskList.stream()
+					.filter(task -> task.getEndDate().after(date) && task.getEndDate() == date)
+					.toList(); 
+		}
+		else {
+			return taskList.stream()
+					.filter(task -> task.getEndDate().after(date))
+					.toList();
+		}
+	}
+	
 }
