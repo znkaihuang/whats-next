@@ -87,6 +87,28 @@ public class UserServiceController {
 		
 	}
 	
+	@GetMapping("/toggle-role/{userId}")
+	public String toggleRole(@PathVariable(name = "userId") Long userId) {
+		
+		userService.toggleRole(userId);
+		String redirectURLsuffix = (ascending == null) ? "" : "?ascending=" + ascending.toString();
+		
+		return "redirect:/user-list/" + pageNum.toString() + redirectURLsuffix;
+	}
+	
+	@GetMapping("/delete-user/{userId}")
+	public String deleteUser(@PathVariable(name = "userId") Long userId) {
+		
+		userService.deleteUser(userId);
+		String redirectURLsuffix = (ascending == null) ? "" : "?ascending=" + ascending.toString();
+		
+		if (userService.getTotalUserNum() % userService.USER_PER_PAGE == 1 && pageNum > 1) {
+			pageNum--;
+		}
+		
+		return "redirect:/user-list/" + pageNum.toString() + redirectURLsuffix;
+	}
+	
 	public List<User> populateAllUsers(Integer pageNum) {
 		
 		Optional<List<User>> userListOptional = userService.retrieveAllUsersByPage(pageNum);

@@ -120,9 +120,30 @@ public class UserService {
 		
 	}
 	
-	public void deleteUser(String userName) {
+	public void deleteUser(Long userId) {
 		
-		repository.deleteUser(repository.findByUserName(userName).get().getUserId());
+		repository.deleteUser(userId);
+		
+	}
+	
+	// Switch role between admin and normal user
+	public void toggleRole(Long userId) {
+		
+		User user = repository.findByUserId(userId);
+		if (user.getRole() == Role.ADMIN) {
+			user.setRole(Role.USER);
+		}
+		else if (user.getRole() == Role.USER) {
+			user.setRole(Role.ADMIN);
+		}
+		repository.updateUser(user);
+	}
+	
+	public void updateRole(Long userId, Role role) {
+		
+		User user = repository.findByUserId(userId);
+		user.setRole(role);
+		repository.updateUser(user);
 		
 	}
 	
