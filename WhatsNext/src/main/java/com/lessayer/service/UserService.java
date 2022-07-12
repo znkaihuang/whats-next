@@ -160,10 +160,23 @@ public class UserService {
 		
 	}
 	
-	public void updatePassword(String userName, String password) {
+	public void updatePassword(String userName, String password) throws RuntimeException {
 		
-		User user = repository.findByUserName(userName).get();
+		Optional<User> userOptional = repository.findByUserName(userName);
+		
+		if (userOptional.isEmpty()) {
+			throw new RuntimeException("Cannot find any user with name " + userName);
+		}
+		
+		User user = userOptional.get();
 		user.setPassword(password);
+		userDetailsManager.deleteUser(userName);
+		userDetailsManager.createUser(org.springframework.security.core.userdetails.User.builder()
+				.passwordEncoder(encoder::encode)
+				.username(userName)
+				.password(password)
+				.roles(user.getRole().toString())
+				.build());
 		repository.updateUser(user);
 		
 	}
