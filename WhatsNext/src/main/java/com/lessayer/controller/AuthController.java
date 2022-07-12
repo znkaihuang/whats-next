@@ -54,7 +54,31 @@ public class AuthController {
 		}
 		return "redirect:/login?registerSuccess=true";
 	}
-
+	
+	@GetMapping("/forgetPassword")
+	public String showForgetPasswordPage(@RequestParam(required = false) Boolean userNotExisted, ModelMap model) {
+		
+		if (userNotExisted != null) {
+			model.addAttribute("userNotExisted", true);
+		}
+		
+		return "forgetpassword";
+	}
+	
+	@PostMapping("/resetPassword")
+	public String resetPassword(@RequestParam(name = "username") String userName,
+			@RequestParam(name = "password") String password, ModelMap model) {
+		
+		try {
+			userService.updatePassword(userName, password);
+		}
+		catch (Exception e) {
+			return "redirect:/forgetPassword?userNotExisted=true";
+		}
+		
+		return "redirect:/login";
+	}
+	
 	@GetMapping("/logout")
 	public String logout() {
 
