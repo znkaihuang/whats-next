@@ -96,7 +96,8 @@ class UserServiceTests {
 	void testDeleteUser() {
 		
 		String userName = "Terry";
-		service.deleteUser(userName);
+		User user = service.retrieveUserByName(userName).get();
+		service.deleteUser(user.getUserId());
 		logger.info("Delete user {}", userName);
 		
 	}
