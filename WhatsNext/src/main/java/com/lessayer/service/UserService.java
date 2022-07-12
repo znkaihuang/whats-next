@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import com.lessayer.entity.Role;
@@ -19,6 +22,9 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
+	private UserDetailsManager userDetailsManager;
+	
+	private PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	public final Integer USER_PER_PAGE = 8;
 	private Integer totalPage;
 	private Integer totalUserNum;
@@ -113,6 +119,12 @@ public class UserService {
 		}
 		else {
 			
+			userDetailsManager.createUser(org.springframework.security.core.userdetails.User.builder()
+					.passwordEncoder(encoder::encode)
+					.username(userName)
+					.password(password)
+					.roles(role.toString())
+					.build());
 			repository.createUser(new User(userName, password, email, role, 
 					Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now())));
 			
@@ -122,6 +134,7 @@ public class UserService {
 	
 	public void deleteUser(Long userId) {
 		
+		userDetailsManager.deleteUser(retrieveUserById(userId).get().getUserName());
 		repository.deleteUser(userId);
 		
 	}
@@ -186,6 +199,10 @@ public class UserService {
 	
 	public Integer getTotalUserNum() {
 		return totalUserNum;
+	}
+	
+	public void setUserDetailsManager(UserDetailsManager userDetailsManager) {
+		this.userDetailsManager = userDetailsManager;
 	}
 	
 }
