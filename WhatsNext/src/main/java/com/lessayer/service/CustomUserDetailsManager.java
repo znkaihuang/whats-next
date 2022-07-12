@@ -21,10 +21,11 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 	
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private final Map<String, UserDetails> users = new HashMap<>();
+	private Map<String, UserDetails> users = new HashMap<>();
 	
 	public CustomUserDetailsManager(UserService service) {
 		
+		service.setUserDetailsManager(this);
 		this.service = service;
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		List<com.lessayer.entity.User> adminList = service.retrieveAllAdmins();
@@ -114,6 +115,5 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 	public UserService getService() {
 		return service;
 	}
-	
 	
 }
