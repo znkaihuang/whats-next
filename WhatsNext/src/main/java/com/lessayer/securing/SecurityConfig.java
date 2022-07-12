@@ -14,39 +14,29 @@ import com.lessayer.service.UserService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private UserService service;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		http.authorizeRequests()
-				.antMatchers("/login", "/logout", "/webjars/**")
-				.permitAll()
-				.antMatchers("/**")
-				.authenticated()
-				.and()
-			.formLogin(form -> form
-				.loginPage("/login")
-				.failureUrl("/login?error")
-				.permitAll()
-					)
-			.logout()
-				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login?logout")
-				.permitAll();
+				.antMatchers("/register", "/forgetPassword", "/login", "/logout", "/webjars/**")
+				.permitAll().antMatchers("/**").authenticated().and()
+				.formLogin(form -> form.loginPage("/login").failureUrl("/login?error").permitAll()).logout()
+				.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll();
 		http.formLogin();
 		http.httpBasic();
-	
+
 	}
-	
+
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		
+
 		return new CustomUserDetailsManager(service);
-		
+
 	}
-	
+
 }
