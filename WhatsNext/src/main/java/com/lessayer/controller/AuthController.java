@@ -1,11 +1,16 @@
 package com.lessayer.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.entity.Role;
@@ -18,6 +23,8 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 	
+	private Date loggedInDate;
+	
 	@GetMapping("/login")
 	public String login(@RequestParam(required = false, name = "registerSuccess") Boolean registerSuccess,
 			ModelMap model) {
@@ -25,6 +32,7 @@ public class AuthController {
 		if (registerSuccess != null) {
 			model.addAttribute("registerSuccess", true);
 		}
+		loggedInDate = Date.valueOf(LocalDate.now());
 		
 		return "login";
 
@@ -81,9 +89,20 @@ public class AuthController {
 	
 	@GetMapping("/logout")
 	public String logout() {
-
+		
 		return "logout";
 
 	}
-
+	
+	@ResponseBody
+	@GetMapping("/updateLastLoginDate")
+	public String updateLastLoginDate() {
+		
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		userService.updateLastLoginDate(userName, loggedInDate);
+		
+		return "Update finished";
+		
+	}
+	
 }
