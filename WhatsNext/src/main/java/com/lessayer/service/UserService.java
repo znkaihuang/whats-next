@@ -197,6 +197,14 @@ public class UserService {
 		
 	}
 	
+	public void updateTaskNumInHomePage(String userName, Integer taskNum) {
+		
+		User user = repository.findByUserName(userName).get();
+		user.setTaskNumInHomePage(taskNum);
+		repository.updateUser(user);
+		
+	}
+	
 	public void sortUsersByRole(List<User> userList, Boolean ascendingOrder) {
 		
 		Integer factor = (ascendingOrder) ? 1 : -1;
