@@ -47,11 +47,12 @@ public class TaskRepository {
 	}
 
 	// PSQL Name = "find_all_tasks_by_priority",
-	// PSQL Query = "select t from Task t where t.priority like :priority"
-	public List<Task> findByUserPriority(Priority priority) {
+	// PSQL Query = "select t from Task t where t.userId like :userId and t.priority like :priority"
+	public List<Task> findByUserPriority(Long userId, Priority priority) {
 
-		query = entityManager.createNamedQuery("find_all_tasks_by_priority", Task.class).setParameter("priority",
-				priority);
+		query = entityManager.createNamedQuery("find_all_tasks_by_priority", Task.class)
+				.setParameter("userId", userId)
+				.setParameter("priority", priority);
 		return query.getResultList();
 
 	}

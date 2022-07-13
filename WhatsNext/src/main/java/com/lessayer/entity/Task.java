@@ -11,7 +11,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQuery(name = "find_all_tasks", query = "select t from Task t")
 @NamedQuery(name = "find_all_tasks_by_userID", query = "select t from Task t where t.userId like :userId")
-@NamedQuery(name = "find_all_tasks_by_priority", query = "select t from Task t where t.priority like :priority")
+@NamedQuery(name = "find_all_tasks_by_priority", query = "select t from Task t where t.userId like :userId and t.priority like :priority")
 @NamedQuery(name = "return_number_of_tasks", query = "select count(t) from Task t")
 public class Task {
 
