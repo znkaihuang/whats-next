@@ -20,6 +20,7 @@ import com.lessayer.TaskDiv;
 import com.lessayer.entity.Priority;
 import com.lessayer.entity.Role;
 import com.lessayer.entity.Task;
+import com.lessayer.entity.User;
 import com.lessayer.service.TaskListService;
 import com.lessayer.service.UserService;
 
@@ -87,20 +88,31 @@ public class WelcomeController {
 
 		Long urgentThresholdDay = 7L;
 		Date date = Date.valueOf(LocalDate.now().minusDays(urgentThresholdDay));
-
+		
+		List<Task> returnedTaskList = null;
+		
 		switch (populateType) {
 		case "Important Urgent Tasks":
-			return taskListService.filterTaskListBeforEndDate(importantTasks, date, true);
+			returnedTaskList = taskListService.filterTaskListBeforEndDate(importantTasks, date, true);
+			break;
 		case "Important Not Urgent Tasks":
-			return taskListService.filterTaskListAfterEndDate(importantTasks, date, false);
+			returnedTaskList = taskListService.filterTaskListAfterEndDate(importantTasks, date, false);
+			break;
 		case "Not Important Urgent Tasks":
-			return taskListService.filterTaskListBeforEndDate(notImportantTasks, date, true);
+			returnedTaskList = taskListService.filterTaskListBeforEndDate(notImportantTasks, date, true);
+			break;
 		case "Not Important Not Urgent Tasks":
-			return taskListService.filterTaskListAfterEndDate(notImportantTasks, date, false);
+			returnedTaskList = taskListService.filterTaskListAfterEndDate(notImportantTasks, date, false);
+			break;
 		default:
-			return null;
+			
 		}
-
+		
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userService.retrieveUserByName(userName).get();
+		
+		return returnedTaskList.subList(0, Math.min(returnedTaskList.size(), user.getTaskNumInHomePage()));
+		
 	}
 
 }
