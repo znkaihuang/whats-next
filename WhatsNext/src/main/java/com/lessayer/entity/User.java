@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 
-
 @Entity
 @NamedQuery(
 		name = "find_all_users",
@@ -33,6 +32,7 @@ public class User {
 	private Role role;
 	private Date registerDate;
 	private Date lastLoginDate;
+	private Integer taskNumInHomePage;
 	
 	public User() {
 		
@@ -48,6 +48,7 @@ public class User {
 		this.role = role;
 		this.registerDate = registerDate;
 		this.lastLoginDate = lastLoginDate;
+		this.taskNumInHomePage = 10;
 	
 	}
 
@@ -110,7 +111,15 @@ public class User {
 	
 		return registerDate;
 	}
+	
+	public Integer getTaskNumInHomePage() {
+		return taskNumInHomePage;
+	}
 
+	public void setTaskNumInHomePage(Integer taskNumInHomePage) {
+		this.taskNumInHomePage = taskNumInHomePage;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("UserId=%d\n"
