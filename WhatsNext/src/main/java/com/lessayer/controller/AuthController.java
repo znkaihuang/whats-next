@@ -104,11 +104,16 @@ public class AuthController {
 	@GetMapping("/updateLastLoginDate")
 	public String updateLastLoginDate() {
 		
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		userService.updateLastLoginDate(userName, loggedInDate);
+		actionsBeforeLogOut();
 		
 		return "Update finished";
 		
 	}
 	
+	private void actionsBeforeLogOut() {
+		
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		userService.updateLastLoginDate(userName, loggedInDate);
+		
+	}
 }
