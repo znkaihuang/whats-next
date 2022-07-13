@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.entity.Role;
+import com.lessayer.service.TaskListService;
 import com.lessayer.service.UserService;
 
 @Controller
@@ -22,6 +23,9 @@ public class AuthController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private TaskListService taskListService;
 	
 	private Date loggedInDate;
 	
@@ -89,6 +93,8 @@ public class AuthController {
 	
 	@GetMapping("/logout")
 	public String logout() {
+		
+		taskListService.clearTaskListCache();
 		
 		return "logout";
 
