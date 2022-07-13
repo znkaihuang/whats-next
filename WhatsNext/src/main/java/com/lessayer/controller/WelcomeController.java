@@ -1,5 +1,6 @@
 package com.lessayer.controller;
 
+import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,36 +52,38 @@ public class WelcomeController {
 	}
 	
 	@ModelAttribute("taskDivs")
-	public List<TaskDiv> populateTaskDivs() {
-
+	public List<TaskDiv> populateTaskDivs(Principal principal) {
+		
+		Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
+		
 		if (taskDivs.isEmpty()) {
 			taskDivs.add(new TaskDiv("Important Urgent Tasks", "first-task-div",
-					populateTaskListForTaskDivs("Important Urgent Tasks")));
+					populateTaskListForTaskDivs(userId, "Important Urgent Tasks")));
 			taskDivs.add(new TaskDiv("Important Not Urgent Tasks", "second-task-div",
-					populateTaskListForTaskDivs("Important Not Urgent Tasks")));
+					populateTaskListForTaskDivs(userId, "Important Not Urgent Tasks")));
 			taskDivs.add(new TaskDiv("Not Important Urgent Tasks", "third-task-div",
-					populateTaskListForTaskDivs("Not Important Urgent Tasks")));
+					populateTaskListForTaskDivs(userId, "Not Important Urgent Tasks")));
 			taskDivs.add(new TaskDiv("Not Important Not Urgent Tasks", "forth-task-div",
-					populateTaskListForTaskDivs("Not Important Not Urgent Tasks")));
+					populateTaskListForTaskDivs(userId, "Not Important Not Urgent Tasks")));
 		}
 		else {
-			taskDivs.get(0).setTaskList(populateTaskListForTaskDivs("Important Urgent Tasks"));
-			taskDivs.get(1).setTaskList(populateTaskListForTaskDivs("Important Not Urgent Tasks"));
-			taskDivs.get(2).setTaskList(populateTaskListForTaskDivs("Not Important Urgent Tasks"));
-			taskDivs.get(3).setTaskList(populateTaskListForTaskDivs("Not Important Not Urgent Tasks"));
+			taskDivs.get(0).setTaskList(populateTaskListForTaskDivs(userId, "Important Urgent Tasks"));
+			taskDivs.get(1).setTaskList(populateTaskListForTaskDivs(userId, "Important Not Urgent Tasks"));
+			taskDivs.get(2).setTaskList(populateTaskListForTaskDivs(userId, "Not Important Urgent Tasks"));
+			taskDivs.get(3).setTaskList(populateTaskListForTaskDivs(userId, "Not Important Not Urgent Tasks"));
 		}
 
 		return taskDivs;
 	}
 
-	public List<Task> populateTaskListForTaskDivs(String populateType) {
+	public List<Task> populateTaskListForTaskDivs(Long userId, String populateType) {
 
 		Priority[] importantPriority = { Priority.CRITICAL, Priority.HIGH };
 		Priority[] notImportantPriority = { Priority.MEDIUM, Priority.LOW };
 		List<Task> importantTasks = taskListService
-				.filterTaskListWithActiveStatus(taskListService.retrieveTasksByPriorities(importantPriority).get());
+				.filterTaskListWithActiveStatus(taskListService.retrieveTasksByPriorities(userId, importantPriority).get());
 		List<Task> notImportantTasks = taskListService
-				.filterTaskListWithActiveStatus(taskListService.retrieveTasksByPriorities(notImportantPriority).get());
+				.filterTaskListWithActiveStatus(taskListService.retrieveTasksByPriorities(userId, notImportantPriority).get());
 
 		Long urgentThresholdDay = 7L;
 		Date date = Date.valueOf(LocalDate.now().minusDays(urgentThresholdDay));

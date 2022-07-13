@@ -77,9 +77,9 @@ public class TaskListController {
 	}
 
 	@PostMapping("/add-task")
-	public String createTask(String taskId, String userId, @RequestParam String title, @RequestParam String description,
+	public String createTask(String taskId, @RequestParam String title, @RequestParam String description,
 			@RequestParam String startDate, @RequestParam String endDate, @RequestParam String priority,
-			@RequestParam String status, @RequestParam(required = false) String from) {
+			@RequestParam String status, @RequestParam(required = false) String from, Principal principal) {
 
 		if (!taskId.isEmpty()) {
 			taskService.updateTask(Long.valueOf(taskId), title, description, Date.valueOf(startDate),
@@ -94,7 +94,8 @@ public class TaskListController {
 				return "redirect:/task-list/" + pageNum + urlSuffix;
 			}
 		} else {
-			taskService.createTask(title, description, Date.valueOf(startDate), Date.valueOf(endDate),
+			Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
+			taskService.createTask(userId, title, description, Date.valueOf(startDate), Date.valueOf(endDate),
 					Priority.valueOf(priority), TaskStatus.valueOf(status));
 
 ////        Mark this code due to new task will always show at the top item in the first page.
@@ -128,9 +129,11 @@ public class TaskListController {
 	}
 
 	@GetMapping("/update-task")
-	public String showUpdateTask(@RequestParam Long taskId, @RequestParam(required = false) String from, ModelMap model) {
-
-		Task task = taskService.retrieveTaskById(taskId).get();
+	public String showUpdateTask(@RequestParam Long taskId, @RequestParam(required = false) String from, 
+			Principal principal, ModelMap model) {
+		
+		Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
+		Task task = taskService.retrieveTaskById(userId, taskId).get();
 
 		model.put("updateTask", task);
 		model.put("taskFormTitle", "Update Task");
@@ -147,17 +150,15 @@ public class TaskListController {
 	public List<Task> populateTasks(Principal principal, Integer pageNum) {
 
 		Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
-		taskService.setUserId(userId);
 
-		return taskService.retrieveTasksByPage(pageNum).get();
+		return taskService.retrieveTasksByPage(userId, pageNum).get();
 	}
 
 	public List<Task> populateTasks(Principal principal, Integer pageNum, String sortField, Boolean ascending) {
 
 		Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
-		taskService.setUserId(userId);
 
-		return taskService.retrieveTasksByPage(pageNum, sortField, ascending).get();
+		return taskService.retrieveTasksByPage(userId, pageNum, sortField, ascending).get();
 	}
 
 }
