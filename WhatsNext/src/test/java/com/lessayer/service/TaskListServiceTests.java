@@ -33,20 +33,13 @@ class TaskListServiceTests {
 	
 	private Long userId = 2L;
 	
-	@BeforeEach
-	void setTestConfiguration() {
-		
-		service.setUserId(userId);
-		
-	}
-	
 	@Test
 	void retrieveTasksTest() {
 		
-		if(service.retrieveTasks().isPresent()) {
+		if(service.retrieveTasks(userId).isPresent()) {
 			logger.info("Tasks with user id {}: {}", userId, 
-					service.retrieveTasks().get());
-			printTaskList(service.retrieveTasks().get());
+					service.retrieveTasks(userId).get());
+			printTaskList(service.retrieveTasks(userId).get());
 		}
 		else {
 			logger.info("No task with user id {}.", userId);
@@ -57,10 +50,10 @@ class TaskListServiceTests {
 	@Test
 	void retrieveTaskByIdTest() {
 		
-		Long taskId = service.retrieveTasks().get().get(0).getTaskId();
-		if(service.retrieveTaskById(taskId).isPresent()) {
+		Long taskId = service.retrieveTasks(userId).get().get(0).getTaskId();
+		if(service.retrieveTaskById(userId, taskId).isPresent()) {
 			logger.info("Task id {}: {}", taskId, 
-					service.retrieveTaskById(taskId).get());
+					service.retrieveTaskById(userId, taskId).get());
 		}
 		else {
 			logger.info("No task with task id {}.", taskId);
@@ -78,13 +71,13 @@ class TaskListServiceTests {
 		Priority priority = Priority.CRITICAL;
 		TaskStatus status = TaskStatus.NEW;
 		
-		Long taskId = service.createTask(title, description, 
+		Long taskId = service.createTask(userId, title, description, 
 									startDate, endDate, priority, status);
 		logger.info("Successfully create task. The task ID is {}.", taskId);
-		logger.info("The content of created task: {}", service.retrieveTaskById(taskId));
+		logger.info("The content of created task: {}", service.retrieveTaskById(userId, taskId));
 		
 		
-		Task updateTask = service.retrieveTaskById(taskId).get();
+		Task updateTask = service.retrieveTaskById(userId, taskId).get();
 		logger.info("Before update. Task id {}: {}", taskId, updateTask);
 		updateTask.setTitle("Learn French grammar");
 		updateTask.setDescription("Test update");
@@ -94,20 +87,20 @@ class TaskListServiceTests {
 					updateTask.getEndDate(), updateTask.getPriority(), updateTask.getStatus());
 		
 		logger.info("After update. Task id {}: {}", taskId, 
-				service.retrieveTaskById(taskId).get());
+				service.retrieveTaskById(userId, taskId).get());
 		
 		
-		logger.info("Before delete task id {}: {}", taskId, service.retrieveTasks());
+		logger.info("Before delete task id {}: {}", taskId, service.retrieveTasks(userId));
 		service.deleteTask(taskId);
-		logger.info("After delete task id {}: {}", taskId, service.retrieveTasks());
+		logger.info("After delete task id {}: {}", taskId, service.retrieveTasks(userId));
 		
 	}
 	
 	@Test
 	void sortTasksByIdTest() {
 		
-		List<Task> taskList = service.retrieveTasks().get();
-		logger.info("Before sort by id: {}", service.retrieveTasks());
+		List<Task> taskList = service.retrieveTasks(userId).get();
+		logger.info("Before sort by id: {}", service.retrieveTasks(userId));
 		
 		service.sortTasksById(taskList,true);
 		logger.info("After sort in ascending order by id: {}", taskList);
@@ -120,8 +113,8 @@ class TaskListServiceTests {
 	@Test
 	void sortTasksByTitleTest() {
 		
-		List<Task> taskList = service.retrieveTasks().get();
-		logger.info("Before sort by id: {}", service.retrieveTasks());
+		List<Task> taskList = service.retrieveTasks(userId).get();
+		logger.info("Before sort by id: {}", service.retrieveTasks(userId));
 		
 		service.sortTasksByTitle(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
@@ -136,8 +129,8 @@ class TaskListServiceTests {
 	@Test
 	void sortTasksByStartDateTest() {
 		
-		List<Task> taskList = service.retrieveTasks().get();
-		logger.info("Before sort by id: {}", service.retrieveTasks());
+		List<Task> taskList = service.retrieveTasks(userId).get();
+		logger.info("Before sort by id: {}", service.retrieveTasks(userId));
 		
 		service.sortTasksByStartDate(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
@@ -152,8 +145,8 @@ class TaskListServiceTests {
 	@Test
 	void sortTasksByEndDateTest() {
 		
-		List<Task> taskList = service.retrieveTasks().get();
-		logger.info("Before sort by id: {}", service.retrieveTasks());
+		List<Task> taskList = service.retrieveTasks(userId).get();
+		logger.info("Before sort by id: {}", service.retrieveTasks(userId));
 		
 		service.sortTasksByEndDate(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
@@ -168,8 +161,8 @@ class TaskListServiceTests {
 	@Test
 	void sortTasksByPriorityTest() {
 		
-		List<Task> taskList = service.retrieveTasks().get();
-		logger.info("Before sort by id: {}", service.retrieveTasks());
+		List<Task> taskList = service.retrieveTasks(userId).get();
+		logger.info("Before sort by id: {}", service.retrieveTasks(userId));
 		
 		service.sortTasksByPriority(taskList,true);
 		logger.info("After sort in ascending order by id: {}", 
@@ -184,9 +177,8 @@ class TaskListServiceTests {
 	@Test
 	void generateData() {
 		Integer dataNum = 30;
-		realTaskListService.setUserId(1L);
 		for (Integer i = 0; i < dataNum; i++) {
-			realTaskListService.createTask("Task " + String.valueOf(i), "For testing", 
+			realTaskListService.createTask(1L, "Task " + String.valueOf(i), "For testing", 
 					Date.valueOf("2022-07-07"), Date.valueOf("2022-07-10"), 
 					Priority.MEDIUM, TaskStatus.NEW);
 		}
@@ -202,7 +194,7 @@ class TaskListServiceTests {
 					Date.valueOf("2022-07-07"), Date.valueOf("2022-07-10"), 
 					Priority.MEDIUM, TaskStatus.NEW));
 		}
-		Mockito.when(service.retrieveTasks()).thenReturn(Optional.ofNullable(taskList));
+		Mockito.when(service.retrieveTasks(userId)).thenReturn(Optional.ofNullable(taskList));
 		
 	}
 	
