@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12 mt-4">
-					<h4 style="font-weight: bold;">Welcome back, [[${userName}]]!</h5>
+					<h4 style="font-weight: bold;">Welcome back, [[${userName}]]!</h4>
 				</div>
 				<th:block th:each="taskDiv, iterStat : ${taskDivs}">
 					<div th:replace="fragments :: collapsible-tasks (${taskDiv.name}, ${taskDiv.style}, ${taskDiv.taskList})"></div>
