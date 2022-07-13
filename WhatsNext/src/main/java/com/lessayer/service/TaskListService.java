@@ -21,23 +21,20 @@ public class TaskListService {
 	private TaskRepository repository;
 
 	public final Integer TASKS_PER_PAGE = 8;
-	private Long userId;
 	private List<Task> taskListCache;
 	private Boolean updateCache = false;
 	private Integer totalPage;
 	private Integer totalTaskNum;
-
-	public void setUserId(Long userId) {
-
-		this.userId = userId;
-
+	
+	public void clearTaskListCache() {
+		taskListCache = null;
 	}
-
-	public Optional<List<Task>> retrieveTasks() {
+	
+	public Optional<List<Task>> retrieveTasks(Long userId) {
 
 		Optional<List<Task>> taskListCacheOptional = Optional.ofNullable(taskListCache);
 		if (taskListCacheOptional.isEmpty() || updateCache) {
-			taskListCache = repository.findByUserId(this.userId);
+			taskListCache = repository.findByUserId(userId);
 			totalTaskNum = taskListCache.size();
 			if (totalTaskNum == 0) {
 				totalPage = 0;
@@ -54,14 +51,14 @@ public class TaskListService {
 		}
 	}
 
-	public Optional<List<Task>> retrieveTasksByPage(Integer pageNum) {
+	public Optional<List<Task>> retrieveTasksByPage(Long userId, Integer pageNum) {
 
-		Optional<List<Task>> taskListOptional = retrieveTasks();
+		Optional<List<Task>> taskListOptional = retrieveTasks(userId);
 		if (taskListOptional.isEmpty()) {
 			return taskListOptional;
 		} else {
 			List<Task> taskList = taskListOptional.get();
-			sortTasksById(taskList, updateCache);
+			sortTasksById(taskList, false);
 
 			return Optional.ofNullable(taskList.subList((pageNum - 1) * TASKS_PER_PAGE,
 					Math.min(taskListOptional.get().size(), pageNum * TASKS_PER_PAGE)));
@@ -69,9 +66,10 @@ public class TaskListService {
 
 	}
 
-	public Optional<List<Task>> retrieveTasksByPage(Integer pageNum, String sortField, Boolean ascending) {
+	public Optional<List<Task>> retrieveTasksByPage(Long userId, Integer pageNum,
+			String sortField, Boolean ascending) {
 
-		Optional<List<Task>> taskListOptional = retrieveTasks();
+		Optional<List<Task>> taskListOptional = retrieveTasks(userId);
 		if (taskListOptional.isEmpty()) {
 			return taskListOptional;
 		} else {
@@ -112,10 +110,10 @@ public class TaskListService {
 	}
 
 	// To prevent accessing other user's tasks, would check the user id first.
-	public Optional<Task> retrieveTaskById(Long taskId) {
+	public Optional<Task> retrieveTaskById(Long userId, Long taskId) {
 
 		Task task = repository.findByTaskId(taskId);
-		if (task.getUserId() == this.userId) {
+		if (task.getUserId() == userId) {
 
 			return Optional.ofNullable(task);
 
@@ -127,22 +125,22 @@ public class TaskListService {
 
 	}
 
-	public Optional<List<Task>> retrieveTasksByPriority(Priority priority) {
-		return Optional.ofNullable(repository.findByUserPriority(priority));
+	public Optional<List<Task>> retrieveTasksByPriority(Long userId, Priority priority) {
+		return Optional.ofNullable(repository.findByUserPriority(userId, priority));
 	}
 	
-	public Optional<List<Task>> retrieveTasksByPriorities(Priority[] priorities) {
+	public Optional<List<Task>> retrieveTasksByPriorities(Long userId, Priority[] priorities) {
 		List<Task> returnTaskList = new ArrayList<>();
 		
 		for (Priority priority : priorities) {
-			returnTaskList.addAll(retrieveTasksByPriority(priority).get());
+			returnTaskList.addAll(retrieveTasksByPriority(userId, priority).get());
 		}
 		
 		return Optional.ofNullable(returnTaskList);
 	}
 	
-	public Long createTask(String title, String description, Date startDate, Date endDate, Priority priority,
-			TaskStatus status) {
+	public Long createTask(Long userId, String title, String description, Date startDate,
+			Date endDate, Priority priority, TaskStatus status) {
 
 		Task task = new Task(userId, title, description, startDate, endDate, priority, status);
 		updateCache = true;
