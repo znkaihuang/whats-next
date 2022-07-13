@@ -41,11 +41,10 @@ public class WelcomeController {
 		Authentication authentication = context.getAuthentication();
 		String userName = authentication.getName();
 		Boolean isAdmin = (userService.retrieveUserByName(userName).get().getRole() == Role.ADMIN) ? true : false;
-
+		
 		model.put("userName", userName);
 		model.put("isAdmin", isAdmin);
 		model.put("currentPage", "home");
-//		model.put("taskDivs", populateTaskDivs());
 
 		return "welcome";
 
