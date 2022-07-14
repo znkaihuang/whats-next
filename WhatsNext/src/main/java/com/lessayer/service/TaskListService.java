@@ -230,32 +230,17 @@ public class TaskListService {
 				.toList();
 	}
 	
-	public List<Task> filterTaskListBeforEndDate(List<Task> taskList, Date date, Boolean equalInclude) {
-		
-		if (equalInclude) {
-			return taskList.stream()
-					.filter(task -> task.getEndDate().before(date) && task.getEndDate() == date)
-					.toList(); 
-		}
-		else {
-			return taskList.stream()
-					.filter(task -> task.getEndDate().before(date))
+	public List<Task> filterTaskListBetweenDateRange(List<Task> taskList, Date dateStart, Date dateEnd) {
+		return taskList.stream()
+					.filter(task -> task.getEndDate() == dateStart || task.getEndDate() == dateEnd ||
+							(task.getEndDate().after(dateStart) && task.getEndDate().before(dateEnd)))
 					.toList();
-		}
 	}
 	
-	public List<Task> filterTaskListAfterEndDate(List<Task> taskList, Date date, Boolean equalInclude) {
-		
-		if (equalInclude) {
+	public List<Task> filterTaskListOutsideDateRange(List<Task> taskList, Date dateStart, Date dateEnd) {
 			return taskList.stream()
-					.filter(task -> task.getEndDate().after(date) && task.getEndDate() == date)
-					.toList(); 
-		}
-		else {
-			return taskList.stream()
-					.filter(task -> task.getEndDate().after(date))
+					.filter(task -> (task.getEndDate().after(dateEnd) || task.getEndDate().before(dateStart)))
 					.toList();
-		}
 	}
 	
 }
