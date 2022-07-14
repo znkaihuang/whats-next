@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lessayer.TaskDiv;
@@ -37,7 +36,7 @@ public class WelcomeController {
 	private List<TaskDiv> taskDivs = new ArrayList<>();
 	
 	@GetMapping("/")
-	public String showWelcomePage(ModelMap model) {
+	public String showWelcomePage(Principal principal, ModelMap model) {
 
 		SecurityContext context = SecurityContextHolder.getContext();
 		Authentication authentication = context.getAuthentication();
@@ -47,12 +46,13 @@ public class WelcomeController {
 		model.put("userName", userName);
 		model.put("isAdmin", isAdmin);
 		model.put("currentPage", "home");
+		model.put("taskDivs", populateTaskDivs(principal));
 
 		return "welcome";
 
 	}
 	
-	@ModelAttribute("taskDivs")
+//	@ModelAttribute("taskDivs")
 	public List<TaskDiv> populateTaskDivs(Principal principal) {
 		
 		Long userId = userService.retrieveUserByName(principal.getName()).get().getUserId();
@@ -87,22 +87,23 @@ public class WelcomeController {
 				.filterTaskListWithActiveStatus(taskListService.retrieveTasksByPriorities(userId, notImportantPriority).get());
 
 		Long urgentThresholdDay = 7L;
-		Date date = Date.valueOf(LocalDate.now().minusDays(urgentThresholdDay));
+		Date dateStart = Date.valueOf(LocalDate.now().minusDays(urgentThresholdDay));
+		Date dateEnd = Date.valueOf(LocalDate.now().plusDays(urgentThresholdDay));
 		
 		List<Task> returnedTaskList = null;
 		
 		switch (populateType) {
 		case "Important Urgent Tasks":
-			returnedTaskList = taskListService.filterTaskListBeforEndDate(importantTasks, date, true);
+			returnedTaskList = taskListService.filterTaskListBetweenDateRange(importantTasks, dateStart, dateEnd);
 			break;
 		case "Important Not Urgent Tasks":
-			returnedTaskList = taskListService.filterTaskListAfterEndDate(importantTasks, date, false);
+			returnedTaskList = taskListService.filterTaskListOutsideDateRange(importantTasks, dateStart, dateEnd);
 			break;
 		case "Not Important Urgent Tasks":
-			returnedTaskList = taskListService.filterTaskListBeforEndDate(notImportantTasks, date, true);
+			returnedTaskList = taskListService.filterTaskListBetweenDateRange(notImportantTasks, dateStart, dateEnd);
 			break;
 		case "Not Important Not Urgent Tasks":
-			returnedTaskList = taskListService.filterTaskListAfterEndDate(notImportantTasks, date, false);
+			returnedTaskList = taskListService.filterTaskListOutsideDateRange(notImportantTasks, dateStart, dateEnd);
 			break;
 		default:
 			
