@@ -46,8 +46,7 @@ Feeling the home page is too croweded, collapse those you don't want to see.
 
 ## Live demonstration
 
-"What's next" has been deployed on Heroku. Click [the link](https://whats-next-demo.herokuapp.com) to have a go.
-Demonstrated account:
+"What's next" has been deployed on Heroku. Click [the link](https://whats-next-demo.herokuapp.com) and use the following demonstrated account to have a go:
 
 - Username: Timo
 - Password: demo
