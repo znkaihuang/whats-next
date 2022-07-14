@@ -1,6 +1,6 @@
 # What's Next
 
-"What's Next" is a scheduler application for recording every import events in your daily life. With the user-friendly interface, it's easy to get started. 
+"What's Next" is a scheduler application for recording every important events in your daily life. With the user-friendly interface, it's easy to get started. 
 
 ## Features
 
@@ -53,4 +53,4 @@ Feeling the home page is too croweded, collapse those you don't want to see.
 
 ## License
 
-This project is distributed under the GNU GPL Version 3. See LICENSE.txt for more information.
+This project is distributed under the GNU GPL Version 3. See LICENSE.md for more information.
