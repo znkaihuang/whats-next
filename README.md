@@ -30,7 +30,7 @@ Feeling the home page is too croweded, collapse those you don't want to see.
 
 ## Installation
 
-### Prerequisite
+### Prerequisites
 
 1. Java 16
 2. Gradle
