@@ -25,8 +25,8 @@ class TaskListServiceTests {
 	static private Logger logger = LoggerFactory
 			.getLogger(TaskListServiceTests.class);
 	
-	@Autowired
-	private TaskListService realTaskListService;
+//	@Autowired
+//	private TaskListService realTaskListService;
 	
 	@Mock
 	private TaskListService service;
@@ -174,15 +174,15 @@ class TaskListServiceTests {
 		
 	}
 	
-	@Test
-	void generateData() {
-		Integer dataNum = 30;
-		for (Integer i = 0; i < dataNum; i++) {
-			realTaskListService.createTask(1L, "Task " + String.valueOf(i), "For testing", 
-					Date.valueOf("2022-07-07"), Date.valueOf("2022-07-10"), 
-					Priority.MEDIUM, TaskStatus.NEW);
-		}
-	}
+//	@Test
+//	void generateData() {
+//		Integer dataNum = 30;
+//		for (Integer i = 0; i < dataNum; i++) {
+//			realTaskListService.createTask(1L, "Task " + String.valueOf(i), "For testing", 
+//					Date.valueOf("2022-07-07"), Date.valueOf("2022-07-10"), 
+//					Priority.MEDIUM, TaskStatus.NEW);
+//		}
+//	}
 	
 	@BeforeEach
 	void generateMockData() {
